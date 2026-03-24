@@ -5,6 +5,7 @@ import Header from './components/Header';
 import InstallPrompt from './components/InstallPrompt';
 import Landing from './pages/Landing';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import Login from './pages/Login';
 import App from './App';
 import './index.css';
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<Landing />} />
         <Route path="/herramientas" element={<App />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/login" element={<Login />} />
       </Routes>
       <InstallPrompt />
