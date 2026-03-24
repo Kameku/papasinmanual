@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0ea5e9"/>
+  <g transform="translate(256,240)">
+    <!-- Book -->
+    <rect x="-100" y="-60" width="200" height="140" rx="12" fill="white" opacity="0.95"/>
+    <line x1="0" y1="-50" x2="0" y2="70" stroke="#0ea5e9" stroke-width="3" opacity="0.3"/>
+    <!-- Sparkle top-left -->
+    <g transform="translate(-60,-100)" fill="#facc15">
+      <polygon points="0,-18 5,-5 18,0 5,5 0,18 -5,5 -18,0 -5,-5"/>
+    </g>
+    <!-- Sparkle top-right -->
+    <g transform="translate(70,-90)" fill="#facc15">
+      <polygon points="0,-12 3,-3 12,0 3,3 0,12 -3,3 -12,0 -3,-3"/>
+    </g>
+    <!-- Sparkle small -->
+    <g transform="translate(90,-60)" fill="#facc15">
+      <polygon points="0,-8 2,-2 8,0 2,2 0,8 -2,2 -8,0 -2,-2"/>
+    </g>
+    <!-- Heart -->
+    <g transform="translate(0,120)" fill="#f97316">
+      <path d="M0,8 C0,8 -24,-10 -24,-22 C-24,-30 -16,-34 -8,-30 C-3,-28 0,-22 0,-22 C0,-22 3,-28 8,-30 C16,-34 24,-30 24,-22 C24,-10 0,8 0,8Z"/>
+    </g>
+  </g>
+  <!-- Text -->
+  <text x="256" y="420" text-anchor="middle" fill="white" font-family="sans-serif" font-weight="700" font-size="42">PAPÁ SIN MANUAL</text>
+</svg>

@@ -1,0 +1,119 @@
+# ============================================
+# STUDDY — .gitignore
+# Stack: React + Vite + TypeScript + TailwindCSS + PWA
+# ============================================
+
+# ────────────────────────────────────────────
+# Dependencias
+# ────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ────────────────────────────────────────────
+# Builds / Output
+# ────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+out/
+.output/
+*.local
+
+# ────────────────────────────────────────────
+# Variables de entorno (secretos)
+# ────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ────────────────────────────────────────────
+# Logs
+# ────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ────────────────────────────────────────────
+# Cache & herramientas
+# ────────────────────────────────────────────
+.cache/
+.vite/
+.turbo/
+.eslintcache
+.stylelintcache
+.parcel-cache/
+
+# ────────────────────────────────────────────
+# TypeScript
+# ────────────────────────────────────────────
+*.tsbuildinfo
+
+# ────────────────────────────────────────────
+# Testing & cobertura
+# ────────────────────────────────────────────
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# ────────────────────────────────────────────
+# PWA / Service Workers (generados por vite-plugin-pwa)
+# ────────────────────────────────────────────
+public/sw.js
+public/workbox-*.js
+public/sw.js.map
+public/workbox-*.js.map
+dev-dist/
+
+# ────────────────────────────────────────────
+# macOS
+# ────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# ────────────────────────────────────────────
+# Windows
+# ────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ────────────────────────────────────────────
+# Editores e IDEs
+# ────────────────────────────────────────────
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ────────────────────────────────────────────
+# Agentes de IA / herramientas de desarrollo
+# ────────────────────────────────────────────
+.claude/
+.gemini/
+.aider*
+.cursor/
+
+# ────────────────────────────────────────────
+# Otros
+# ────────────────────────────────────────────
+*.map
+*.zip
+*.tar.gz
