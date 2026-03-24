@@ -70,14 +70,14 @@ No necesitas ser maestro para promover la educación activa:
     readTime: '6 min',
     date: '3 de Junio, 2026',
     content: `
-Cuando sostuve a mi hija por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no echarlo a perder, pero nadie lo hizo. 
+Cuando sostuve a mi hijo por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no echarlo a perder, pero nadie lo hizo. 
 
 El título de este proyecto, *"Un Papá Sin Manual"*, nace de esa cruda y humilde verdad: todos estamos improvisando. Al principio, recurrí a la salida fácil que toma buena parte de nuestra generación. Encendía la televisión para poder tener 20 minutos de paz y responder correos del trabajo. Funcionaba a corto plazo, pero notaba que los berrinches aumentaban tras apagar la pantalla. 
 
 ### El cambio de rumbo
-Una tarde decidí desenchufar el televisor e imprimir hojas de trabajo básicas. Puse sobre la mesa una montaña de crayones. El primer día fue una batalla, pero al tercer día, ella llegaba de la escuela pidiendo sus "tareas especiales". 
+Una tarde decidí desenchufar el televisor e imprimir hojas de trabajo básicas. Puse sobre la mesa una montaña de crayones. El primer día fue una batalla, pero al tercer día, él llegaba de la escuela pidiendo sus "tareas especiales". 
 
-La necesidad de tener acceso a material educativo inagotable y personalizado para sus temas del colegio me llevó a escribir el código de esta aplicación. Comencé a crear sopas de letras, crucigramas y lecturas usando inteligencia artificial, simplemente porque quería herramientas gratuitas para ella.
+La necesidad de tener acceso a material educativo inagotable y personalizado para sus temas del colegio me llevó a escribir el código de esta aplicación. Comencé a crear sopas de letras, crucigramas y lecturas usando inteligencia artificial, simplemente porque quería herramientas gratuitas para él.
 
 Hoy lo comparto con el mundo. Si sirve de algo, mi principal lección tras estos años ha sido que un niño no necesita un manual perfecto para ser educado; solo necesita saber que su padre está presente, intentándolo todos los días.
     `.trim()
