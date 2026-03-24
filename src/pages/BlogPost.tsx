@@ -18,9 +18,10 @@ export default function BlogPost() {
       <div className="relative w-full h-[40vh] min-h-[300px] sm:h-[50vh] xl:h-[60vh] overflow-hidden">
         <div className="absolute inset-0 bg-slate-900/40 z-10" />
         <img 
+          style={{ objectPosition: post.imagePosition || 'center' }}
           src={post.coverImage} 
           alt={post.title} 
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-x-0 bottom-0 top-0 flex items-center justify-center z-20 p-4">
           <div className="max-w-4xl mx-auto w-full">
@@ -49,6 +50,10 @@ export default function BlogPost() {
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
                   Lectura: {post.readTime}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-xs">✍️</span>
+                  Por {post.author}
                 </span>
               </div>
             </motion.div>

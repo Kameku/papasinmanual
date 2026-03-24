@@ -254,13 +254,14 @@ export default function Landing() {
                 >
                   <div className="rounded-xl overflow-hidden mb-4 relative aspect-video">
                     <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors z-10" />
-                    <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                    <img style={{ objectPosition: post.imagePosition || 'center' }} src={post.coverImage} alt={post.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
                   </div>
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
                     <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-bold ${post.color}`}>
                       {post.tag}
                     </span>
                     <span className="text-slate-400 font-medium text-xs">• {post.readTime}</span>
+                    <span className="text-slate-400 font-medium text-xs">• Por {post.author}</span>
                   </div>
                   <h3 className="text-sm sm:text-lg font-bold text-slate-700 mb-2 group-hover:text-sky-600 transition-colors leading-snug">
                     {post.title}

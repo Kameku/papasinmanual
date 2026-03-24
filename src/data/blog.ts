@@ -7,11 +7,38 @@ export interface BlogPost {
   tag: string;
   color: string;
   coverImage: string;
+  imagePosition?: string;
   readTime: string;
   date: string;
+  author: string;
 }
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    id: '3',
+    slug: 'papa-sin-manual-experiencia',
+    title: 'Ser papá sin manual: mi experiencia real',
+    excerpt: 'Nadie te prepara para ser padre. Comparto los errores que cometí, lo que aprendí y por qué decidí crear herramientas para otros papás.',
+    tag: 'Experiencia',
+    color: 'bg-amber-50 text-amber-600',
+    coverImage: '/images/blog/un papa sin manual.jpeg',
+    imagePosition: 'bottom',
+    readTime: '6 min',
+    date: '3 de Junio, 2026',
+    author: 'Michael Angel',
+    content: `
+Cuando sostuve a mi hijo por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no echarlo a perder, pero nadie lo hizo. 
+
+El título de este proyecto, *"Un Papá Sin Manual"*, nace de esa cruda y humilde verdad: todos estamos improvisando. Al principio, recurrí a la salida fácil que toma buena parte de nuestra generación. Encendía la televisión para poder tener 20 minutos de paz y responder correos del trabajo. Funcionaba a corto plazo, pero notaba que los berrinches aumentaban tras apagar la pantalla. 
+
+### El cambio de rumbo
+Una tarde decidí desenchufar el televisor e imprimir hojas de trabajo básicas. Puse sobre la mesa una montaña de crayones. El primer día fue una batalla, pero al tercer día, él llegaba de la escuela pidiendo sus "tareas especiales". 
+
+La necesidad de tener acceso a material educativo inagotable y personalizado para sus temas del colegio me llevó a escribir el código de esta aplicación. Comencé a crear sopas de letras, crucigramas y lecturas usando inteligencia artificial, simplemente porque quería herramientas gratuitas para él.
+
+Hoy lo comparto con el mundo. Si sirve de algo, mi principal lección tras estos años ha sido que un niño no necesita un manual perfecto para ser educado; solo necesita saber que su padre está presente, intentándolo todos los días.
+    `.trim()
+  },
   {
     id: '1',
     slug: 'alejar-ninos-youtube',
@@ -22,13 +49,14 @@ export const BLOG_POSTS: BlogPost[] = [
     coverImage: '/images/blog/post_1.png',
     readTime: '4 min',
     date: '15 de Mayo, 2026',
+    author: 'Un Papá Sin Manual',
     content: `
 La llegada de las pantallas a los hogares modernos ha solucionado un problema a corto plazo para muchos padres: mantener a los niños entretenidos. Sin embargo, el costo a largo plazo que estamos pagando es innegable. 
 
 Cuando dejamos que el algoritmo de una plataforma decida qué información debe consumir el frágil y maleable cerebro de un niño en desarrollo, estamos entregando su atención a un sistema diseñado exclusivamente para generar retención y clics, no aprendizaje ni bienestar. Los expertos coinciden en que la exposición sostenida a estímulos visuales hiper-rápidos reduce drásticamente el "span" de atención natural del niño.
 
 ### El mito del "contenido educativo"
-Muchas de las aplicaciones y canales que se venden bajo la etiqueta "Kids" están saturados de luces intermitentes, sonidos agudos y un ritmo frenético. Este tipo de formato aumenta los niveles de dopamina pero paraliza la creatividad. Un niño necesita aburrirse para poder inventar; necesita el silencio para poder crear. 
+Muchas de las aplicaciones y canales que se venden bajo la etiqueta "Kids" están saturados de luces intermitentes, sonidos marginados y un ritmo frenético. Este tipo de formato aumenta los niveles de dopamina pero paraliza la creatividad. Un niño necesita aburrirse para poder inventar; necesita el silencio para poder crear. 
 
 ### Recuperando la conexión
 Alejar a tu hijo de estas plataformas no significa que debas estar jugando con él 24/7. Significa reemplazar un iPad por herramientas físicas (lápices, hojas para colorear, rompecabezas de madera). Como padre, el mayor regalo que le puedes dar hoy a tus hijos es la capacidad de enfocarse en el mundo real. Promueve un entorno donde la recompensa provenga de *construir* y de *pensar*, en lugar de *deslizar* la pantalla hacia abajo.
@@ -44,6 +72,7 @@ Alejar a tu hijo de estas plataformas no significa que debas estar jugando con �
     coverImage: '/images/blog/post_2.png',
     readTime: '5 min',
     date: '22 de Mayo, 2026',
+    author: 'Un Papá Sin Manual',
     content: `
 La pedagogía tradicional insiste a menudo en mantener a los niños sentados, escuchando silenciosamente y memorizando información de un libro de texto. Sin embargo, la ciencia cognitiva moderna nos enseña que el cerebro humano —especialmente en sus primeras etapas de desarrollo— absorbe información infinitamente mejor a través del *aprendizaje activo*.
 
@@ -60,29 +89,6 @@ No necesitas ser maestro para promover la educación activa:
     `.trim()
   },
   {
-    id: '3',
-    slug: 'papa-sin-manual-experiencia',
-    title: 'Ser papá sin manual: mi experiencia real',
-    excerpt: 'Nadie te prepara para ser padre. Comparto los errores que cometí, lo que aprendí y por qué decidí crear herramientas para otros papás.',
-    tag: 'Experiencia',
-    color: 'bg-amber-50 text-amber-600',
-    coverImage: '/images/blog/post_3.png',
-    readTime: '6 min',
-    date: '3 de Junio, 2026',
-    content: `
-Cuando sostuve a mi hijo por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no echarlo a perder, pero nadie lo hizo. 
-
-El título de este proyecto, *"Un Papá Sin Manual"*, nace de esa cruda y humilde verdad: todos estamos improvisando. Al principio, recurrí a la salida fácil que toma buena parte de nuestra generación. Encendía la televisión para poder tener 20 minutos de paz y responder correos del trabajo. Funcionaba a corto plazo, pero notaba que los berrinches aumentaban tras apagar la pantalla. 
-
-### El cambio de rumbo
-Una tarde decidí desenchufar el televisor e imprimir hojas de trabajo básicas. Puse sobre la mesa una montaña de crayones. El primer día fue una batalla, pero al tercer día, él llegaba de la escuela pidiendo sus "tareas especiales". 
-
-La necesidad de tener acceso a material educativo inagotable y personalizado para sus temas del colegio me llevó a escribir el código de esta aplicación. Comencé a crear sopas de letras, crucigramas y lecturas usando inteligencia artificial, simplemente porque quería herramientas gratuitas para él.
-
-Hoy lo comparto con el mundo. Si sirve de algo, mi principal lección tras estos años ha sido que un niño no necesita un manual perfecto para ser educado; solo necesita saber que su padre está presente, intentándolo todos los días.
-    `.trim()
-  },
-  {
     id: '4',
     slug: 'televisión-vs-lectura-estudios',
     title: 'La televisión vs. la lectura: lo que los estudios dicen',
@@ -92,6 +98,7 @@ Hoy lo comparto con el mundo. Si sirve de algo, mi principal lección tras estos
     coverImage: '/images/blog/post_4.png',
     readTime: '4 min',
     date: '10 de Junio, 2026',
+    author: 'Un Papá Sin Manual',
     content: `
 A menudo caemos en el falso equilibrio de pensar que ver televisión educativa es un sustituto válido de un libro. La neurociencia ha probado ampliamente que los beneficios cognitivos de la lectura en papel no son replicables por el contenido audiovisual.
 
@@ -116,6 +123,7 @@ Ese es el poder del generador de *Lecturas a Medida*. Si a tu hijo le encantan l
     coverImage: '/images/blog/post_5.png',
     readTime: '5 min',
     date: '18 de Junio, 2026',
+    author: 'Un Papá Sin Manual',
     content: `
 El síndrome de abstinencia digital es un reto real cuando los padres deciden retirar las pantallas. La clave del éxito no está en prohibir, sino en ofrecer alternativas más táctiles y placenteras. Aquí propongo 5 actividades prácticas que rescatan el enfoque de los más pequeños:
 
@@ -145,6 +153,7 @@ Genera una hoja con inicios de cuentos intrigantes y toma turnos para escribir (
     coverImage: '/images/blog/post_6.png',
     readTime: '6 min',
     date: '25 de Junio, 2026',
+    author: 'Un Papá Sin Manual',
     content: `
 Un error común entre los padres modernos es creer que la educación de sus hijos ocurre de modo exclusivo dentro de un salón de clases entre las 8:00 AM y las 3:00 PM. Lo cierto es que el hogar es, indudablemente, el principal catalizador de cualquier éxito intelectual y emocional. 
 
