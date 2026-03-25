@@ -26,7 +26,7 @@ export default function Header() {
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-white" />
             </div>
             <span className="text-base sm:text-lg font-bold text-slate-700">
-              Papá <span className="text-sky-600">Sin Manual</span>
+              Solo un Papá <span className="text-sky-600">REAL</span>
             </span>
           </Link>
 
