@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, GraduationCap, Printer, RefreshCcw, Pencil, Brain, Download, Paperclip, X, FileText, Image as ImageIcon, BookOpenCheck, PenLine, ArrowLeft } from 'lucide-react';
+import { BookOpen, GraduationCap, Printer, RefreshCcw, Pencil, Brain, Download, Paperclip, X, FileText, Image as ImageIcon, BookOpenCheck, PenLine, ArrowLeft, Palette } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { generateAndDownloadPdf } from './lib/pdf';
@@ -17,6 +17,10 @@ import {
   MenuSection,
   READING_TYPES,
   ReadingType,
+  COLORING_CATEGORIES,
+  ColoringCategory,
+  ColoringMode,
+  generateColoringImage,
 } from './lib/gemini';
 
 type Step = 'menu' | 'input' | 'generating' | 'result';
@@ -69,6 +73,15 @@ const MENU_ITEMS: { key: MenuSection; label: string; description: string; icon: 
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-200 hover:border-purple-400',
   },
+  {
+    key: 'coloring',
+    label: 'Colorear',
+    description: 'Dibujos para colorear y unir puntos para imprimir',
+    icon: <Palette className="w-8 h-8 sm:w-10 sm:h-10" />,
+    color: 'text-pink-600',
+    bgColor: 'bg-pink-50',
+    borderColor: 'border-pink-200 hover:border-pink-400',
+  },
 ];
 
 function getSectionColors(section: MenuSection) {
@@ -77,6 +90,7 @@ function getSectionColors(section: MenuSection) {
     case 'exam': return { primary: 'orange', accent: 'orange' };
     case 'reading': return { primary: 'emerald', accent: 'emerald' };
     case 'writing': return { primary: 'purple', accent: 'purple' };
+    case 'coloring': return { primary: 'pink', accent: 'pink' };
   }
 }
 
@@ -86,6 +100,7 @@ function getSectionLabel(section: MenuSection) {
     case 'exam': return 'Examen Práctico';
     case 'reading': return 'Lectura';
     case 'writing': return 'Escritura';
+    case 'coloring': return 'Colorear';
   }
 }
 
@@ -112,6 +127,10 @@ export default function App() {
   const [readingType, setReadingType] = useState<ReadingType>('cuento');
   const [readingLength, setReadingLength] = useState<'short' | 'long'>('short');
   const [readingDescription, setReadingDescription] = useState('');
+  // Coloring options
+  const [coloringCategory, setColoringCategory] = useState<ColoringCategory>('animales');
+  const [coloringMode, setColoringMode] = useState<ColoringMode>('outline');
+  const [coloringDescription, setColoringDescription] = useState('');
   // For study guides: two independent contents
   const [generatedContentEs, setGeneratedContentEs] = useState('');
   const [generatedContentEn, setGeneratedContentEn] = useState('');
@@ -178,8 +197,8 @@ export default function App() {
   };
 
   const handleGenerate = async () => {
-    // Reading doesn't require material (type + subject is enough)
-    if (!subject || (activeSection !== 'reading' && !materialText && uploadedFiles.length === 0)) {
+    // Reading and coloring don't require material
+    if (!subject || (activeSection !== 'reading' && activeSection !== 'coloring' && !materialText && uploadedFiles.length === 0)) {
       setError('Por favor selecciona una materia y proporciona material (texto o archivos).');
       return;
     }
@@ -240,6 +259,9 @@ export default function App() {
           generateStudyImage(subject, age)
         ]);
         setGeneratedContent(content);
+        setGeneratedImage(image);
+      } else if (activeSection === 'coloring') {
+        const image = await generateColoringImage(coloringCategory, coloringMode, coloringDescription, age);
         setGeneratedImage(image);
       }
 
@@ -411,6 +433,7 @@ export default function App() {
                     activeSection === 'guide' ? 'bg-sky-100 text-sky-700' :
                     activeSection === 'exam' ? 'bg-orange-100 text-orange-700' :
                     activeSection === 'reading' ? 'bg-emerald-100 text-emerald-700' :
+                    activeSection === 'coloring' ? 'bg-pink-100 text-pink-700' :
                     'bg-purple-100 text-purple-700'
                   }`}>
                     {getSectionLabel(activeSection)}
@@ -418,8 +441,8 @@ export default function App() {
                 </div>
 
                 {/* Subject & Age (Subject hidden for reading) */}
-                <div className={`grid ${activeSection === 'reading' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-6`}>
-                  {activeSection !== 'reading' && (
+                <div className={`grid ${activeSection === 'reading' || activeSection === 'coloring' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-6`}>
+                  {activeSection !== 'reading' && activeSection !== 'coloring' && (
                     <div className="space-y-2">
                       <label className="block text-lg font-bold text-sky-700">Materia</label>
                       <div className="relative">
@@ -580,6 +603,83 @@ export default function App() {
                   </div>
                 )}
 
+                {/* Coloring Options */}
+                {activeSection === 'coloring' && (
+                  <div className="space-y-6 p-6 bg-pink-50 rounded-2xl border-2 border-pink-100">
+                    <h3 className="text-lg font-bold text-pink-600">Tipo de Dibujo</h3>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={() => setColoringMode('outline')}
+                        className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${
+                          coloringMode === 'outline'
+                            ? 'border-pink-500 bg-white text-pink-700 shadow-md'
+                            : 'border-pink-100 text-slate-400 hover:border-pink-200'
+                        }`}
+                      >
+                        <span className="text-2xl">🖍️</span>
+                        <span className="font-bold text-sm">Para Colorear</span>
+                        <span className="text-xs text-center">Contornos limpios para pintar</span>
+                      </button>
+                      <button
+                        onClick={() => setColoringMode('dotted')}
+                        className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${
+                          coloringMode === 'dotted'
+                            ? 'border-pink-500 bg-white text-pink-700 shadow-md'
+                            : 'border-pink-100 text-slate-400 hover:border-pink-200'
+                        }`}
+                      >
+                        <span className="text-2xl">🔢</span>
+                        <span className="font-bold text-sm">Unir Puntos</span>
+                        <span className="text-xs text-center">Conecta los puntos numerados</span>
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block font-bold text-pink-700">Categoría</label>
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                        {COLORING_CATEGORIES.map((cat) => (
+                          <button
+                            key={cat.key}
+                            onClick={() => setColoringCategory(cat.key)}
+                            className={`p-3 rounded-xl border-2 text-sm font-bold transition-all flex flex-col items-center gap-1 ${
+                              coloringCategory === cat.key
+                                ? 'border-pink-500 bg-white text-pink-700 shadow-md scale-105'
+                                : 'border-pink-100 text-slate-400 hover:border-pink-200'
+                            }`}
+                          >
+                            <span className="text-xl">{cat.emoji}</span>
+                            <span className="text-xs">{cat.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block font-bold text-pink-700">Descripción <span className="font-normal text-slate-400 text-sm">(opcional)</span></label>
+                      <input
+                        type="text"
+                        value={coloringDescription}
+                        onChange={(e) => setColoringDescription(e.target.value)}
+                        placeholder="Ej: un gato jugando con una pelota, Bugs Bunny comiendo zanahoria..."
+                        className="w-full px-4 py-3 rounded-xl border-2 border-pink-100 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all text-base"
+                      />
+                    </div>
+
+                    <div className="p-3 bg-pink-100/50 rounded-xl">
+                      <p className="text-pink-700 text-sm">
+                        🎨 Se generará un dibujo <strong>{coloringMode === 'outline' ? 'para colorear' : 'de unir puntos'}</strong> de <strong>{COLORING_CATEGORIES.find(c => c.key === coloringCategory)?.label}</strong> listo para imprimir.
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                      <p className="text-amber-700 text-sm">
+                        <strong>⚠️ Nota:</strong> Por políticas de los proveedores de inteligencia artificial, algunas imágenes con personajes protegidos por derechos de autor (como personajes de series, películas o marcas registradas) podrían no generarse. Si esto ocurre, intenta con una descripción diferente o elige otra categoría.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Guide info note */}
                 {activeSection === 'guide' && (
                   <div className="p-4 bg-sky-50 rounded-2xl border-2 border-sky-100">
@@ -589,8 +689,8 @@ export default function App() {
                   </div>
                 )}
 
-                {/* Material Input (hidden for reading - not needed) */}
-                {activeSection !== 'reading' && (
+                {/* Material Input (hidden for reading & coloring) */}
+                {activeSection !== 'reading' && activeSection !== 'coloring' && (
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <label className="block text-lg font-bold text-sky-700">Material de Estudio</label>
@@ -666,6 +766,8 @@ export default function App() {
               <p className="text-base sm:text-lg text-slate-400 text-center max-w-md px-4">
                 {activeSection === 'guide'
                   ? 'Generando tus guías en Español e Inglés...'
+                  : activeSection === 'coloring'
+                  ? 'Creando tu dibujo para colorear...'
                   : 'Preparando actividades divertidas...'}
               </p>
             </div>
@@ -696,7 +798,22 @@ export default function App() {
                     Imprimir
                   </button>
 
-                  {activeSection === 'guide' ? (
+                  {activeSection === 'coloring' ? (
+                    <button
+                      onClick={() => {
+                        if (!generatedImage) return;
+                        const link = document.createElement('a');
+                        link.href = generatedImage;
+                        link.download = `colorear_${coloringCategory}_${coloringMode}.png`;
+                        link.click();
+                      }}
+                      disabled={!generatedImage}
+                      className="px-4 sm:px-6 py-2.5 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md shadow-pink-200 transition-all text-sm sm:text-base"
+                    >
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                      Descargar
+                    </button>
+                  ) : activeSection === 'guide' ? (
                     <>
                       <button
                         onClick={() => handleDownloadPDF(generatedContentEs, `${subject.replace(/\s+/g, '_')}_guia_ES.pdf`, 'Español')}
@@ -734,7 +851,32 @@ export default function App() {
               </div>
 
               {/* Result Papers */}
-              {activeSection === 'guide' ? (
+              {activeSection === 'coloring' ? (
+                <div className="flex justify-center">
+                  <div className="bg-white w-full max-w-[215.9mm] p-4 sm:p-[20mm] shadow-xl sm:shadow-2xl rounded-2xl sm:rounded-none print:shadow-none print:w-full print:max-w-none print:p-0">
+                    <div className="border-b-4 border-pink-200 pb-4 sm:pb-6 mb-6 sm:mb-8 text-center">
+                      <h1 className="text-xl sm:text-3xl font-bold text-pink-600 mb-1">
+                        🎨 {coloringMode === 'outline' ? 'Página para Colorear' : 'Unir los Puntos'}
+                      </h1>
+                      <p className="text-slate-400 font-medium uppercase tracking-wider text-xs sm:text-sm">
+                        {COLORING_CATEGORIES.find(c => c.key === coloringCategory)?.label} • {age} Años
+                      </p>
+                    </div>
+                    {generatedImage ? (
+                      <div className="flex justify-center">
+                        <img src={generatedImage} alt="Dibujo para colorear" className="max-w-full h-auto rounded-xl" />
+                      </div>
+                    ) : (
+                      <div className="text-center py-16 text-slate-400">
+                        <p className="text-lg">No se pudo generar la imagen. Intenta de nuevo.</p>
+                      </div>
+                    )}
+                    <div className="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t-2 border-slate-100 text-center text-slate-300 text-xs sm:text-sm">
+                      Generado con cariño por Un Papá Sin Manual
+                    </div>
+                  </div>
+                </div>
+              ) : activeSection === 'guide' ? (
                 <div className="space-y-12">
                   {/* Spanish Guide */}
                   <div>

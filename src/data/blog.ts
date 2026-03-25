@@ -24,7 +24,7 @@ export const BLOG_POSTS: BlogPost[] = [
     coverImage: '/images/blog/un papa sin manual.jpeg',
     imagePosition: 'bottom',
     readTime: '6 min',
-    date: '3 de Junio, 2026',
+    date: '24 de Marzo, 2026',
     author: 'Michael Angel',
     content: `
 Cuando sostuve a mi hijo por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no echarlo a perder, pero nadie lo hizo. 
@@ -48,7 +48,7 @@ Hoy lo comparto con el mundo. Si sirve de algo, mi principal lección tras estos
     color: 'bg-red-50 text-red-600',
     coverImage: '/images/blog/post_1.png',
     readTime: '4 min',
-    date: '15 de Mayo, 2026',
+    date: '24 de Marzo, 2026',
     author: 'Un Papá Sin Manual',
     content: `
 La llegada de las pantallas a los hogares modernos ha solucionado un problema a corto plazo para muchos padres: mantener a los niños entretenidos. Sin embargo, el costo a largo plazo que estamos pagando es innegable. 
@@ -71,7 +71,7 @@ Alejar a tu hijo de estas plataformas no significa que debas estar jugando con �
     color: 'bg-sky-50 text-sky-600',
     coverImage: '/images/blog/post_2.png',
     readTime: '5 min',
-    date: '22 de Mayo, 2026',
+    date: '24 de Marzo, 2026',
     author: 'Un Papá Sin Manual',
     content: `
 La pedagogía tradicional insiste a menudo en mantener a los niños sentados, escuchando silenciosamente y memorizando información de un libro de texto. Sin embargo, la ciencia cognitiva moderna nos enseña que el cerebro humano —especialmente en sus primeras etapas de desarrollo— absorbe información infinitamente mejor a través del *aprendizaje activo*.
@@ -97,7 +97,7 @@ No necesitas ser maestro para promover la educación activa:
     color: 'bg-emerald-50 text-emerald-600',
     coverImage: '/images/blog/post_4.png',
     readTime: '4 min',
-    date: '10 de Junio, 2026',
+    date: '24 de Marzo, 2026',
     author: 'Un Papá Sin Manual',
     content: `
 A menudo caemos en el falso equilibrio de pensar que ver televisión educativa es un sustituto válido de un libro. La neurociencia ha probado ampliamente que los beneficios cognitivos de la lectura en papel no son replicables por el contenido audiovisual.
@@ -122,7 +122,7 @@ Ese es el poder del generador de *Lecturas a Medida*. Si a tu hijo le encantan l
     color: 'bg-purple-50 text-purple-600',
     coverImage: '/images/blog/post_5.png',
     readTime: '5 min',
-    date: '18 de Junio, 2026',
+    date: '24 de Marzo, 2026',
     author: 'Un Papá Sin Manual',
     content: `
 El síndrome de abstinencia digital es un reto real cuando los padres deciden retirar las pantallas. La clave del éxito no está en prohibir, sino en ofrecer alternativas más táctiles y placenteras. Aquí propongo 5 actividades prácticas que rescatan el enfoque de los más pequeños:
@@ -152,7 +152,7 @@ Genera una hoja con inicios de cuentos intrigantes y toma turnos para escribir (
     color: 'bg-orange-50 text-orange-600',
     coverImage: '/images/blog/post_6.png',
     readTime: '6 min',
-    date: '25 de Junio, 2026',
+    date: '24 de Marzo, 2026',
     author: 'Un Papá Sin Manual',
     content: `
 Un error común entre los padres modernos es creer que la educación de sus hijos ocurre de modo exclusivo dentro de un salón de clases entre las 8:00 AM y las 3:00 PM. Lo cierto es que el hogar es, indudablemente, el principal catalizador de cualquier éxito intelectual y emocional. 

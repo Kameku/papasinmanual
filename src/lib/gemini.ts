@@ -11,7 +11,7 @@ export interface ExamOptions {
   lang: 'es' | 'en' | 'both';
 }
 
-export type MenuSection = 'guide' | 'exam' | 'reading' | 'writing';
+export type MenuSection = 'guide' | 'exam' | 'reading' | 'writing' | 'coloring';
 
 const MODEL = "gemini-3.1-pro-preview";
 const IMAGE_MODEL = "gemini-3-pro-image-preview";
@@ -467,4 +467,91 @@ export async function generateWritingMaterial(
   });
 
   return response.text || "Lo siento, no pude generar el contenido.";
+}
+
+// ════════════════════════════════════════════════════════════
+//  Colorear — categorías y tipos
+// ════════════════════════════════════════════════════════════
+export const COLORING_CATEGORIES = [
+  { key: 'animales', label: 'Animales', emoji: '🐾' },
+  { key: 'cartoon', label: 'Cartoon', emoji: '📺' },
+  { key: 'anime', label: 'Anime', emoji: '⭐' },
+  { key: 'looney-tunes', label: 'Looney Tunes', emoji: '🐰' },
+  { key: 'simpsons', label: 'Simpsons', emoji: '🍩' },
+  { key: 'chavo', label: 'Chavo Animado', emoji: '🪣' },
+  { key: 'disney', label: 'Disney', emoji: '🏰' },
+  { key: 'superheroes', label: 'Superhéroes', emoji: '🦸' },
+  { key: 'dinosaurios', label: 'Dinosaurios', emoji: '🦕' },
+  { key: 'espacio', label: 'Espacio', emoji: '🚀' },
+] as const;
+
+export type ColoringCategory = typeof COLORING_CATEGORIES[number]['key'];
+export type ColoringMode = 'dotted' | 'outline';
+
+// ════════════════════════════════════════════════════════════
+//  Colorear — generar imagen para colorear
+// ════════════════════════════════════════════════════════════
+export async function generateColoringImage(
+  category: ColoringCategory,
+  mode: ColoringMode,
+  description: string,
+  age: string
+): Promise<string | null> {
+  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+  if (!apiKey) return null;
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const categoryLabel = COLORING_CATEGORIES.find(c => c.key === category)?.label || category;
+
+  const modePrompt = mode === 'dotted'
+    ? `Crea un dibujo de UNIR PUNTOS (dot-to-dot / connect the dots) para niños de ${age} años.
+El dibujo debe ser un personaje o escena de la categoría "${categoryLabel}".
+${description ? `Tema específico: ${description}.` : ''}
+
+REGLAS ESTRICTAS:
+- Fondo completamente BLANCO
+- Solo puntos numerados (1, 2, 3, 4...) conectados por líneas PUNTEADAS muy suaves
+- Los números deben ser legibles y estar al lado de cada punto
+- El personaje debe formarse al unir todos los puntos en orden
+- Estilo limpio, simple, apto para imprimir en blanco y negro
+- Los puntos deben estar bien espaciados para que un niño pueda seguirlos con lápiz
+- Entre 30 y 60 puntos dependiendo de la complejidad
+- NO usar colores, solo BLANCO Y NEGRO
+- Orientación vertical (portrait), tamaño carta
+- El dibujo debe ocupar la mayor parte de la página`
+
+    : `Crea una página para COLOREAR (coloring page) para niños de ${age} años.
+El dibujo debe ser un personaje o escena de la categoría "${categoryLabel}".
+${description ? `Tema específico: ${description}.` : ''}
+
+REGLAS ESTRICTAS:
+- Fondo completamente BLANCO
+- Solo CONTORNOS/LÍNEAS negras gruesas y limpias (line art)
+- SIN relleno, SIN sombras, SIN colores — solo el contorno negro sobre fondo blanco
+- Las líneas deben ser gruesas y definidas para que un niño pueda colorear dentro de ellas
+- Estilo simple y amigable, adaptado a ${age} años
+- El personaje debe ser reconocible y atractivo para niños
+- Espacios amplios entre líneas para facilitar el coloreado
+- Orientación vertical (portrait), tamaño carta
+- El dibujo debe ocupar la mayor parte de la página
+- Estilo de libro de colorear infantil profesional`;
+
+  const response = await ai.models.generateContent({
+    model: IMAGE_MODEL,
+    contents: {
+      parts: [{ text: modePrompt }],
+    },
+    config: {
+      responseModalities: ['image', 'text'],
+    },
+  });
+
+  for (const part of response.candidates?.[0]?.content?.parts || []) {
+    if (part.inlineData) {
+      return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    }
+  }
+
+  throw new Error("No se pudo generar la imagen. La IA no devolvió una imagen. Intenta con otra descripción o categoría.");
 }
