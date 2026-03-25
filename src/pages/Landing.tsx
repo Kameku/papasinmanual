@@ -132,7 +132,7 @@ export default function Landing() {
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-sky-400/30 to-yellow-300/30 rounded-3xl blur-2xl transform rotate-3" />
               <img
-                src="/images/landing/hero.png"
+                src="/images/landing/unpapasinmanual.jpg"
                 alt="Padre e hijo leyendo un libro, disfrutando tiempo juntos sin pantallas"
                 className="relative rounded-3xl shadow-2xl border-4 border-white/20 object-cover w-full h-[500px]"
               />

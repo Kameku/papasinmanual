@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Heart, Menu, X, LogIn, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import DonationModal from './DonationModal';
 
 const NAV_LINKS = [
@@ -49,58 +50,90 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-2">
             <button
               id="btn-donar-header"
               onClick={() => setDonationOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-sm font-semibold border border-amber-200 transition-all active:scale-95"
+              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-amber-200/50 transition-all active:scale-95 hover:shadow-xl hover:shadow-amber-300/50"
             >
-              <Heart className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span className="hidden sm:inline">Donar</span>
+              <Heart className="w-4 h-4 fill-white" />
+              Donar
             </button>
 
             <Link
               to="/login"
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded-lg text-sm font-semibold transition-all"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-sm font-bold transition-all active:scale-95"
             >
               <LogIn className="w-4 h-4" />
-              <span className="hidden sm:inline">Ingresar</span>
+              Ingresar
             </Link>
-
-            {/* Mobile menu toggle */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 text-slate-400 hover:text-sky-600 -mr-1"
-              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
+
+          {/* Mobile: hamburger only */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-2 text-slate-400 hover:text-sky-600 -mr-1"
+            aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
         {/* Mobile Nav */}
-        {mobileOpen && (
-          <nav className="md:hidden border-t border-sky-50 bg-white px-3 pb-4 pt-2 space-y-1 safe-bottom">
-            {NAV_LINKS.map((link) => {
-              const isActive = location.pathname === link.to;
-              return (
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.nav
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden border-t border-sky-50 bg-white overflow-hidden"
+            >
+              <div className="px-3 pb-4 pt-2 space-y-1">
+                {NAV_LINKS.map((link) => {
+                  const isActive = location.pathname === link.to;
+                  return (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => setMobileOpen(false)}
+                      className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all ${
+                        isActive
+                          ? 'bg-sky-50 text-sky-700'
+                          : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50/50'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
+
+                {/* Divider */}
+                <div className="border-t border-slate-100 my-2" />
+
+                {/* Login */}
                 <Link
-                  key={link.to}
-                  to={link.to}
+                  to="/login"
                   onClick={() => setMobileOpen(false)}
-                  className={`block px-4 py-3 rounded-xl text-base font-semibold transition-all ${
-                    isActive
-                      ? 'bg-sky-50 text-sky-700'
-                      : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50/50'
-                  }`}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold text-slate-500 hover:text-sky-600 hover:bg-sky-50/50 transition-all"
                 >
-                  {link.label}
+                  <LogIn className="w-5 h-5" />
+                  Ingresar
                 </Link>
-              );
-            })}
-          </nav>
-        )}
+
+                {/* Donate — big and prominent */}
+                <button
+                  onClick={() => { setDonationOpen(true); setMobileOpen(false); }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white rounded-xl text-base font-bold shadow-lg shadow-amber-200/50 transition-all active:scale-95 mt-1"
+                >
+                  <Heart className="w-5 h-5 fill-white" />
+                  Apoyar con una Donación
+                </button>
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Modal de donación */}
