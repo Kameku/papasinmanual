@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { BookOpen, GraduationCap, Printer, RefreshCcw, Pencil, Brain, Download, Paperclip, X, FileText, Image as ImageIcon, BookOpenCheck, PenLine, ArrowLeft, Palette } from 'lucide-react';
+import { BookOpen, GraduationCap, Printer, RefreshCcw, Pencil, Brain, Download, Paperclip, X, FileText, Image as ImageIcon, BookOpenCheck, PenLine, ArrowLeft, Palette, ClipboardList } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { generateAndDownloadPdf } from './lib/pdf';
@@ -21,6 +21,12 @@ import {
   ColoringCategory,
   ColoringMode,
   generateColoringImage,
+  WRITING_TYPES,
+  WritingType,
+  WORKSHEET_FORMATS,
+  WorksheetFormat,
+  WorksheetLang,
+  generateWorksheetImage,
 } from './lib/gemini';
 
 type Step = 'menu' | 'input' | 'generating' | 'result';
@@ -67,7 +73,7 @@ const MENU_ITEMS: { key: MenuSection; label: string; description: string; icon: 
   {
     key: 'writing',
     label: 'Escritura',
-    description: 'Escritura creativa, ortografía y expresión escrita',
+    description: 'Caligrafía, ortografía, dictados y práctica de trazo',
     icon: <PenLine className="w-8 h-8 sm:w-10 sm:h-10" />,
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
@@ -82,6 +88,15 @@ const MENU_ITEMS: { key: MenuSection; label: string; description: string; icon: 
     bgColor: 'bg-pink-50',
     borderColor: 'border-pink-200 hover:border-pink-400',
   },
+  {
+    key: 'worksheet',
+    label: 'Worksheets',
+    description: 'Hojas de trabajo visuales con imágenes y ejercicios',
+    icon: <ClipboardList className="w-8 h-8 sm:w-10 sm:h-10" />,
+    color: 'text-teal-600',
+    bgColor: 'bg-teal-50',
+    borderColor: 'border-teal-200 hover:border-teal-400',
+  },
 ];
 
 function getSectionColors(section: MenuSection) {
@@ -91,6 +106,7 @@ function getSectionColors(section: MenuSection) {
     case 'reading': return { primary: 'emerald', accent: 'emerald' };
     case 'writing': return { primary: 'purple', accent: 'purple' };
     case 'coloring': return { primary: 'pink', accent: 'pink' };
+    case 'worksheet': return { primary: 'teal', accent: 'teal' };
   }
 }
 
@@ -101,6 +117,7 @@ function getSectionLabel(section: MenuSection) {
     case 'reading': return 'Lectura';
     case 'writing': return 'Escritura';
     case 'coloring': return 'Colorear';
+    case 'worksheet': return 'Worksheet';
   }
 }
 
@@ -127,6 +144,13 @@ export default function App() {
   const [readingType, setReadingType] = useState<ReadingType>('cuento');
   const [readingLength, setReadingLength] = useState<'short' | 'long'>('short');
   const [readingDescription, setReadingDescription] = useState('');
+  // Writing options
+  const [writingType, setWritingType] = useState<WritingType>('caligrafia');
+  // Worksheet options
+  const [worksheetFormat, setWorksheetFormat] = useState<WorksheetFormat>('table-fill');
+  const [worksheetLang, setWorksheetLang] = useState<WorksheetLang>('es');
+  const [worksheetTopic, setWorksheetTopic] = useState('');
+  const [worksheetDescription, setWorksheetDescription] = useState('');
   // Coloring options
   const [coloringCategory, setColoringCategory] = useState<ColoringCategory>('animales');
   const [coloringMode, setColoringMode] = useState<ColoringMode>('outline');
@@ -197,8 +221,12 @@ export default function App() {
   };
 
   const handleGenerate = async () => {
-    // Reading and coloring don't require material
-    if (!subject || (activeSection !== 'reading' && activeSection !== 'coloring' && !materialText && uploadedFiles.length === 0)) {
+    // Reading, coloring, and worksheet don't require material
+    if (activeSection === 'worksheet' && !worksheetTopic) {
+      setError('Por favor escribe el tema del worksheet.');
+      return;
+    }
+    if (!subject || (activeSection !== 'reading' && activeSection !== 'coloring' && activeSection !== 'worksheet' && !materialText && uploadedFiles.length === 0)) {
       setError('Por favor selecciona una materia y proporciona material (texto o archivos).');
       return;
     }
@@ -255,13 +283,16 @@ export default function App() {
         setGeneratedImage(image);
       } else if (activeSection === 'writing') {
         const [content, image] = await Promise.all([
-          generateWritingMaterial(subject, age, materialText, filesData),
+          generateWritingMaterial(subject, age, materialText, filesData, writingType),
           generateStudyImage(subject, age)
         ]);
         setGeneratedContent(content);
         setGeneratedImage(image);
       } else if (activeSection === 'coloring') {
         const image = await generateColoringImage(coloringCategory, coloringMode, coloringDescription, age);
+        setGeneratedImage(image);
+      } else if (activeSection === 'worksheet') {
+        const image = await generateWorksheetImage(worksheetTopic, worksheetFormat, worksheetLang, age, worksheetDescription);
         setGeneratedImage(image);
       }
 
@@ -434,6 +465,7 @@ export default function App() {
                     activeSection === 'exam' ? 'bg-orange-100 text-orange-700' :
                     activeSection === 'reading' ? 'bg-emerald-100 text-emerald-700' :
                     activeSection === 'coloring' ? 'bg-pink-100 text-pink-700' :
+                    activeSection === 'worksheet' ? 'bg-teal-100 text-teal-700' :
                     'bg-purple-100 text-purple-700'
                   }`}>
                     {getSectionLabel(activeSection)}
@@ -441,8 +473,8 @@ export default function App() {
                 </div>
 
                 {/* Subject & Age (Subject hidden for reading) */}
-                <div className={`grid ${activeSection === 'reading' || activeSection === 'coloring' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-6`}>
-                  {activeSection !== 'reading' && activeSection !== 'coloring' && (
+                <div className={`grid ${activeSection === 'reading' || activeSection === 'coloring' || activeSection === 'worksheet' ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-6`}>
+                  {activeSection !== 'reading' && activeSection !== 'coloring' && activeSection !== 'worksheet' && (
                     <div className="space-y-2">
                       <label className="block text-lg font-bold text-sky-700">Materia</label>
                       <div className="relative">
@@ -680,6 +712,110 @@ export default function App() {
                   </div>
                 )}
 
+                {/* Worksheet Options */}
+                {activeSection === 'worksheet' && (
+                  <div className="space-y-6 p-6 bg-teal-50 rounded-2xl border-2 border-teal-100">
+                    <h3 className="text-lg font-bold text-teal-600">Configura tu Worksheet</h3>
+
+                    <div className="space-y-2">
+                      <label className="block font-bold text-teal-700">Tema *</label>
+                      <input
+                        type="text"
+                        value={worksheetTopic}
+                        onChange={(e) => setWorksheetTopic(e.target.value)}
+                        placeholder="Ej: can / can't, los animales, las frutas, sumas, los colores..."
+                        className="w-full px-4 py-3 rounded-xl border-2 border-teal-100 focus:border-teal-400 focus:ring-4 focus:ring-teal-100 outline-none transition-all text-base"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block font-bold text-teal-700">Formato</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {WORKSHEET_FORMATS.map((fmt) => (
+                          <button
+                            key={fmt.key}
+                            onClick={() => setWorksheetFormat(fmt.key)}
+                            className={`p-3 rounded-xl border-2 text-sm font-bold transition-all flex flex-col items-center gap-1 ${
+                              worksheetFormat === fmt.key
+                                ? 'border-teal-500 bg-white text-teal-700 shadow-md scale-105'
+                                : 'border-teal-100 text-slate-400 hover:border-teal-200'
+                            }`}
+                          >
+                            <span className="text-xl">{fmt.emoji}</span>
+                            <span className="text-xs text-center">{fmt.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block font-bold text-teal-700">Idioma</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {([['es', 'Español'], ['en', 'English'], ['both', 'Bilingüe']] as [WorksheetLang, string][]).map(([key, label]) => (
+                          <button
+                            key={key}
+                            onClick={() => setWorksheetLang(key)}
+                            className={`p-3 rounded-xl border-2 text-sm font-bold transition-all ${
+                              worksheetLang === key
+                                ? 'border-teal-500 bg-white text-teal-700 shadow-md'
+                                : 'border-teal-100 text-slate-400 hover:border-teal-200'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block font-bold text-teal-700">Detalle adicional <span className="font-normal text-slate-400 text-sm">(opcional)</span></label>
+                      <input
+                        type="text"
+                        value={worksheetDescription}
+                        onChange={(e) => setWorksheetDescription(e.target.value)}
+                        placeholder="Ej: usar nombres de animales de granja, incluir dibujos de comida..."
+                        className="w-full px-4 py-3 rounded-xl border-2 border-teal-100 focus:border-teal-400 focus:ring-4 focus:ring-teal-100 outline-none transition-all text-base"
+                      />
+                    </div>
+
+                    <div className="p-3 bg-teal-100/50 rounded-xl">
+                      <p className="text-teal-700 text-sm">
+                        📊 Se generará un worksheet visual de <strong>{WORKSHEET_FORMATS.find(f => f.key === worksheetFormat)?.label}</strong> sobre <strong>"{worksheetTopic || '...'}"</strong> en <strong>{worksheetLang === 'es' ? 'Español' : worksheetLang === 'en' ? 'Inglés' : 'Bilingüe'}</strong>, adaptado a <strong>{age} años</strong>. Listo para imprimir.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Writing Options */}
+                {activeSection === 'writing' && (
+                  <div className="space-y-6 p-6 bg-purple-50 rounded-2xl border-2 border-purple-100">
+                    <h3 className="text-lg font-bold text-purple-600">Tipo de Ejercicio</h3>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {WRITING_TYPES.map((wt) => (
+                        <button
+                          key={wt.key}
+                          onClick={() => setWritingType(wt.key)}
+                          className={`p-3 rounded-xl border-2 text-sm font-bold transition-all flex flex-col items-center gap-1 ${
+                            writingType === wt.key
+                              ? 'border-purple-500 bg-white text-purple-700 shadow-md scale-105'
+                              : 'border-purple-100 text-slate-400 hover:border-purple-200'
+                          }`}
+                        >
+                          <span className="text-xl">{wt.emoji}</span>
+                          <span>{wt.label}</span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="p-3 bg-purple-100/50 rounded-xl">
+                      <p className="text-purple-700 text-sm">
+                        {WRITING_TYPES.find(w => w.key === writingType)?.emoji} {WRITING_TYPES.find(w => w.key === writingType)?.desc}. Adaptado a <strong>{age} años</strong>, listo para imprimir.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Guide info note */}
                 {activeSection === 'guide' && (
                   <div className="p-4 bg-sky-50 rounded-2xl border-2 border-sky-100">
@@ -689,8 +825,8 @@ export default function App() {
                   </div>
                 )}
 
-                {/* Material Input (hidden for reading & coloring) */}
-                {activeSection !== 'reading' && activeSection !== 'coloring' && (
+                {/* Material Input (hidden for reading, coloring & worksheet) */}
+                {activeSection !== 'reading' && activeSection !== 'coloring' && activeSection !== 'worksheet' && (
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <label className="block text-lg font-bold text-sky-700">Material de Estudio</label>
@@ -768,6 +904,8 @@ export default function App() {
                   ? 'Generando tus guías en Español e Inglés...'
                   : activeSection === 'coloring'
                   ? 'Creando tu dibujo para colorear...'
+                  : activeSection === 'worksheet'
+                  ? 'Diseñando tu worksheet visual...'
                   : 'Preparando actividades divertidas...'}
               </p>
             </div>
@@ -798,17 +936,19 @@ export default function App() {
                     Imprimir
                   </button>
 
-                  {activeSection === 'coloring' ? (
+                  {activeSection === 'coloring' || activeSection === 'worksheet' ? (
                     <button
                       onClick={() => {
                         if (!generatedImage) return;
                         const link = document.createElement('a');
                         link.href = generatedImage;
-                        link.download = `colorear_${coloringCategory}_${coloringMode}.png`;
+                        link.download = activeSection === 'worksheet'
+                          ? `worksheet_${worksheetFormat}_${worksheetLang}.png`
+                          : `colorear_${coloringCategory}_${coloringMode}.png`;
                         link.click();
                       }}
                       disabled={!generatedImage}
-                      className="px-4 sm:px-6 py-2.5 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md shadow-pink-200 transition-all text-sm sm:text-base"
+                      className={`px-4 sm:px-6 py-2.5 ${activeSection === 'worksheet' ? 'bg-teal-500 hover:bg-teal-600 shadow-teal-200' : 'bg-pink-500 hover:bg-pink-600 shadow-pink-200'} disabled:opacity-50 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-md transition-all text-sm sm:text-base`}
                     >
                       <Download className="w-4 h-4 sm:w-5 sm:h-5" />
                       Descargar
@@ -869,6 +1009,31 @@ export default function App() {
                     ) : (
                       <div className="text-center py-16 text-slate-400">
                         <p className="text-lg">No se pudo generar la imagen. Intenta de nuevo.</p>
+                      </div>
+                    )}
+                    <div className="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t-2 border-slate-100 text-center text-slate-300 text-xs sm:text-sm">
+                      Generado con cariño por Un Papá Sin Manual
+                    </div>
+                  </div>
+                </div>
+              ) : activeSection === 'worksheet' ? (
+                <div className="flex justify-center">
+                  <div className="bg-white w-full max-w-[215.9mm] p-4 sm:p-[20mm] shadow-xl sm:shadow-2xl rounded-2xl sm:rounded-none print:shadow-none print:w-full print:max-w-none print:p-0">
+                    <div className="border-b-4 border-teal-200 pb-4 sm:pb-6 mb-6 sm:mb-8 text-center">
+                      <h1 className="text-xl sm:text-3xl font-bold text-teal-600 mb-1">
+                        📊 Worksheet: {worksheetTopic}
+                      </h1>
+                      <p className="text-slate-400 font-medium uppercase tracking-wider text-xs sm:text-sm">
+                        {WORKSHEET_FORMATS.find(f => f.key === worksheetFormat)?.label} • {worksheetLang === 'es' ? 'Español' : worksheetLang === 'en' ? 'English' : 'Bilingüe'} • {age} Años
+                      </p>
+                    </div>
+                    {generatedImage ? (
+                      <div className="flex justify-center">
+                        <img src={generatedImage} alt="Worksheet educativo" className="max-w-full h-auto rounded-xl" />
+                      </div>
+                    ) : (
+                      <div className="text-center py-16 text-slate-400">
+                        <p className="text-lg">No se pudo generar el worksheet. Intenta de nuevo.</p>
                       </div>
                     )}
                     <div className="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t-2 border-slate-100 text-center text-slate-300 text-xs sm:text-sm">

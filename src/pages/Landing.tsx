@@ -42,9 +42,9 @@ const TOOLS = [
   },
   { 
     icon: <PenLine className="w-10 h-10 sm:w-12 sm:h-12 text-white" />, 
-    title: 'Laboratorio de Escritura', 
-    desc: 'Mejora su caligrafía, ortografía y expresión escrita de forma creativa.',
-    howTo: 'Generamos hojas pautadas para escribir a mano, usar vocabulario nuevo o guiar una historia.',
+    title: 'Caligrafía y Ortografía',
+    desc: 'Mejora el trazo, la letra y la ortografía de tu hijo con ejercicios para imprimir.',
+    howTo: 'Elige entre caligrafía, dictados, ortografía, sílabas, oraciones o copia creativa. Todo adaptado a su edad.',
     cardClasses: 'bg-purple-500 hover:bg-purple-400 shadow-purple-500/40',
     iconBoxClasses: 'bg-purple-400',
     textColor: 'text-white',
@@ -193,49 +193,36 @@ export default function Landing() {
               Genera material educativo personalizado en segundos. Solo necesitas la edad de tu hijo y el tema.
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {TOOLS.map((tool, i) => (
               <motion.div
                 key={i}
                 initial={{ y: 20, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.08 }}
                 className="h-full"
               >
                 <Link
                   to="/herramientas"
-                  className={`block rounded-[2.5rem] p-6 sm:p-8 md:p-10 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group active:scale-[0.98] h-full flex flex-col relative overflow-hidden ${tool.cardClasses}`}
+                  className={`block rounded-2xl p-6 sm:p-7 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group active:scale-[0.98] relative overflow-hidden h-full flex flex-col ${tool.cardClasses}`}
                 >
-                  {/* Decorative shape overlay */}
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-white opacity-10 rounded-full blur-3xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-700" />
-                  
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl -mr-8 -mt-8" />
                   <div className="relative z-10 flex flex-col h-full">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 mb-6 sm:mb-8">
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 shrink-0 flex items-center justify-center rounded-full ${tool.iconBoxClasses} shadow-inner group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300`}>
-                        {tool.icon}
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className={`w-14 h-14 shrink-0 flex items-center justify-center rounded-xl ${tool.iconBoxClasses} group-hover:scale-110 transition-transform`}>
+                        <div className="[&>svg]:w-7 [&>svg]:h-7">{tool.icon}</div>
                       </div>
-                      <div>
-                        <h3 className={`text-2xl sm:text-3xl font-black ${tool.textColor} tracking-tight mb-2 drop-shadow-sm`}>
-                          {tool.title}
-                        </h3>
-                        <p className={`${tool.descColor} font-medium text-base sm:text-lg leading-snug`}>
-                          {tool.desc}
-                        </p>
-                      </div>
+                      <h3 className={`text-xl sm:text-2xl font-bold ${tool.textColor} tracking-tight`}>
+                        {tool.title}
+                      </h3>
                     </div>
-                    
-                    <div className="mt-auto">
-                      <div className={`${tool.howBg} rounded-3xl p-5 sm:p-6 backdrop-blur-sm border border-white/10 group-hover:bg-black/10 transition-colors`}>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xl">✨</span>
-                          <strong className={`font-bold uppercase tracking-wider text-sm ${tool.textColor} drop-shadow-sm`}>¿Cómo se usa?</strong>
-                        </div>
-                        <p className={`${tool.descColor} text-sm sm:text-base leading-relaxed`}>
-                          {tool.howTo}
-                        </p>
-                      </div>
-                    </div>
+                    <p className={`${tool.descColor} text-base leading-relaxed mb-4`}>
+                      {tool.desc}
+                    </p>
+                    <p className={`${tool.descColor} text-sm leading-relaxed opacity-80 mt-auto`}>
+                      <span className="font-semibold">¿Cómo?</span> {tool.howTo}
+                    </p>
                   </div>
                 </Link>
               </motion.div>

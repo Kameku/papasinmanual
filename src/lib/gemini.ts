@@ -11,7 +11,7 @@ export interface ExamOptions {
   lang: 'es' | 'en' | 'both';
 }
 
-export type MenuSection = 'guide' | 'exam' | 'reading' | 'writing' | 'coloring';
+export type MenuSection = 'guide' | 'exam' | 'reading' | 'writing' | 'coloring' | 'worksheet';
 
 const MODEL = "gemini-3.1-pro-preview";
 const IMAGE_MODEL = "gemini-3-pro-image-preview";
@@ -428,37 +428,285 @@ Debe parecer la portada o ilustración principal de un cuento infantil impreso.`
 }
 
 // ════════════════════════════════════════════════════════════
-//  Escritura
+//  Escritura — tipos de ejercicios
+// ════════════════════════════════════════════════════════════
+export const WRITING_TYPES = [
+  { key: 'caligrafia', label: 'Caligrafía', emoji: '✍️', desc: 'Planas de letras, sílabas y palabras para mejorar el trazo' },
+  { key: 'dictado', label: 'Dictado', emoji: '📝', desc: 'Oraciones para dictar y que el niño escriba a mano' },
+  { key: 'ortografia', label: 'Ortografía', emoji: '🔤', desc: 'Ejercicios de reglas ortográficas: B/V, C/S/Z, H, tildes' },
+  { key: 'silabas', label: 'Sílabas', emoji: '🧩', desc: 'Separar, completar y formar palabras por sílabas' },
+  { key: 'oraciones', label: 'Formar Oraciones', emoji: '📖', desc: 'Ordenar palabras, completar y escribir oraciones propias' },
+  { key: 'copia', label: 'Copia Creativa', emoji: '🖊️', desc: 'Copiar frases, refranes y trabalenguas con buena letra' },
+] as const;
+
+export type WritingType = typeof WRITING_TYPES[number]['key'];
+
+// ════════════════════════════════════════════════════════════
+//  Escritura — generar material
 // ════════════════════════════════════════════════════════════
 export async function generateWritingMaterial(
   subject: string,
   age: string,
   materialText: string,
-  files: UploadedFile[] = []
+  files: UploadedFile[] = [],
+  writingType: WritingType = 'caligrafia'
 ): Promise<string> {
   const ai = getApiClient();
 
-  const systemPrompt = `
-    Actúa como un maestro experto en escritura creativa para niños de ${age} años.
-    Crea un ejercicio de ESCRITURA sobre: ${subject}.
-    Usa el material proporcionado como base.
+  const ageNum = parseInt(age) || 8;
 
-    Estructura:
-    - Título motivador
-    - Calentamiento: completar oraciones cortas
-    - Ejercicio de ortografía: 10 palabras clave
-    - Vocabulario: usar palabras en oraciones propias
-    - Escritura guiada paso a paso
-    - Escritura libre creativa
-    - Rúbrica simple de autoevaluación
-    Incluye líneas (________) donde el niño debe escribir.
+  const writingLabel = WRITING_TYPES.find(w => w.key === writingType)?.label || writingType;
 
-    Formato: Markdown limpio. Español. Usa emojis en títulos.
-    Genera SOLO Markdown.
-  `;
+  // Adaptar complejidad según edad
+  let levelGuide: string;
+  if (ageNum <= 5) {
+    levelGuide = 'Nivel PREESCOLAR: letras grandes, trazos simples, vocales y consonantes básicas. Usa palabras de 3-4 letras máximo. Las líneas de escritura deben ser muy amplias.';
+  } else if (ageNum <= 7) {
+    levelGuide = 'Nivel PRIMERO/SEGUNDO: letras mayúsculas y minúsculas, sílabas directas e inversas, palabras de hasta 6 letras. Oraciones muy cortas (4-5 palabras).';
+  } else if (ageNum <= 9) {
+    levelGuide = 'Nivel TERCERO/CUARTO: palabras más complejas, sílabas trabadas (bl, br, cl, cr, etc.), oraciones completas, inicio de reglas ortográficas (mayúsculas, punto, coma).';
+  } else {
+    levelGuide = 'Nivel AVANZADO: palabras con dificultad ortográfica, tildes, signos de puntuación completos, párrafos cortos, sinónimos y antónimos.';
+  }
+
+  const typePrompts: Record<string, string> = {
+    caligrafia: `Crea una HOJA DE CALIGRAFÍA para niños de ${age} años.
+
+ESTRUCTURA OBLIGATORIA:
+
+## ✍️ Práctica de Caligrafía
+
+### 📝 Calentamiento de Trazo
+Incluye 3 líneas de patrones de trazo para calentar la mano:
+- Línea de zigzag: /\\/\\/\\/\\/\\/\\/\\/\\/\\/\\
+- Línea de ondas: ∿∿∿∿∿∿∿∿∿∿
+- Línea de espirales: @@@@@@@@@
+
+### 🔤 Practica estas Letras
+Elige 4-5 letras que suelen ser difíciles para la edad. Para cada letra muestra:
+- La letra en mayúscula y minúscula como modelo
+- Una línea punteada para que el niño la repita: _ _ _ _ _ _ _ _ _ _ (usa letras punteadas como modelo si es posible)
+- Una palabra que empiece con esa letra para copiar
+
+### ✏️ Copia estas Palabras
+8-10 palabras adaptadas a la edad, cada una seguida de una línea para copiar: ________
+
+### 📄 Copia estas Oraciones
+4-5 oraciones cortas y divertidas. Debajo de cada oración una línea: ________
+Las oraciones deben ser motivadoras ("Mi letra es bonita", "Escribo con cuidado").
+
+### 🌟 Escritura Libre
+Un espacio con varias líneas (________) donde el niño escriba sobre su tema favorito.
+Incluye una instrucción motivadora: "Escribe sobre lo que más te gusta hacer".`,
+
+    dictado: `Crea un EJERCICIO DE DICTADO para niños de ${age} años.
+${materialText ? `Tema base: ${materialText}` : 'Usa temas cotidianos y divertidos para el niño.'}
+
+ESTRUCTURA OBLIGATORIA:
+
+## 📝 Dictado
+
+### 🎯 Palabras Clave del Dictado
+Lista de 10-12 palabras que aparecerán en el dictado. El niño debe leerlas antes para familiarizarse.
+Presenta las palabras en una tabla:
+| Palabra | Sílabas | Dificultad |
+|---------|---------|------------|
+
+### ✏️ Dictado de Palabras
+15 palabras para dictar una por una. Numera cada espacio:
+1. ________
+2. ________
+(etc.)
+Incluye aparte las palabras correctas para que el padre las dicte.
+
+### 📖 Dictado de Oraciones
+6-8 oraciones para dictar. Debajo de cada número, dos líneas para escribir:
+1. ________  ________
+2. ________  ________
+Las oraciones deben incluir las palabras clave.
+
+### 🔍 Revisión
+Incluye TODAS las respuestas correctas para que el niño compare y corrija con color rojo lo que se equivocó.
+
+### 📊 Mi Puntuación
+Tabla para autoevaluación:
+| Palabras correctas | __ / 15 |
+| Oraciones correctas | __ / 8 |
+| Mi nota | ⭐⭐⭐⭐⭐ |`,
+
+    ortografia: `Crea ejercicios de ORTOGRAFÍA para niños de ${age} años.
+${materialText ? `Tema o reglas a practicar: ${materialText}` : 'Elige las reglas ortográficas más importantes para la edad.'}
+
+ESTRUCTURA OBLIGATORIA:
+
+## 🔤 Taller de Ortografía
+
+### 📚 Regla del Día
+Explica de forma simple y divertida 1-2 reglas ortográficas adaptadas a la edad.
+Usa ejemplos claros y una tabla resumen:
+| Regla | Ejemplo correcto | Ejemplo incorrecto |
+|-------|-----------------|-------------------|
+
+### ✏️ Ejercicio 1: Completa con la letra correcta
+10-12 palabras con un espacio en blanco donde va la letra difícil:
+1. _aca → (B o V)
+2. _ielo → (C o S)
+Formato: palabra con hueco + opciones entre paréntesis
+
+### 🔍 Ejercicio 2: Encuentra el Error
+8 oraciones donde una palabra está mal escrita. El niño debe encontrarla y escribirla correctamente:
+1. "El niño fue a jugar con su balón." → ________
+Mezcla oraciones correctas e incorrectas.
+
+### 🧩 Ejercicio 3: Ordena y Escribe
+8 palabras con las letras desordenadas que el niño debe ordenar:
+1. O-R-R-P-E → ________
+2. L-L-E-S-T-A-R → ________
+
+### ✍️ Ejercicio 4: Escribe una oración
+5 palabras difíciles. El niño debe inventar una oración con cada una:
+1. Palabra: "había" → ________
+2. Palabra: "también" → ________
+
+### ✅ Respuestas
+Todas las respuestas organizadas por ejercicio.`,
+
+    silabas: `Crea ejercicios de SÍLABAS para niños de ${age} años.
+
+ESTRUCTURA OBLIGATORIA:
+
+## 🧩 Taller de Sílabas
+
+### 👏 ¿Cuántas sílabas tiene?
+12 palabras. El niño debe separar en sílabas y contar aplausos:
+1. Mariposa → ________ (__ sílabas)
+2. Sol → ________ (__ sílaba)
+
+### 🔗 Une las Sílabas
+Dos columnas en tabla. El niño debe unir sílabas para formar palabras:
+| Columna A | Columna B |
+|-----------|-----------|
+| ma        | llo       |
+| ca        | sa        |
+(8-10 pares)
+
+### ✏️ Completa la Sílaba que Falta
+10 palabras con una sílaba en blanco:
+1. ____pato (za)
+2. pe____ta (lo)
+
+### 🎯 Clasifica por Sílabas
+Tabla de clasificación. Da 15 palabras y el niño las ubica:
+| Monosílabas | Bisílabas | Trisílabas | Polisílabas |
+|-------------|-----------|------------|-------------|
+(espacios vacíos para llenar)
+
+Palabras para clasificar: (lista de 15 palabras variadas)
+
+### 🎨 Inventa Palabras
+El niño inventa 5 palabras que empiecen con una sílaba dada:
+1. Palabras que empiecen con "pa": ________, ________, ________
+(5 sílabas diferentes)
+
+### ✅ Respuestas
+Todas las respuestas.`,
+
+    oraciones: `Crea ejercicios para FORMAR ORACIONES para niños de ${age} años.
+${materialText ? `Tema: ${materialText}` : ''}
+
+ESTRUCTURA OBLIGATORIA:
+
+## 📖 Taller de Oraciones
+
+### 🔀 Ordena la Oración
+8 oraciones con las palabras desordenadas:
+1. gusta / helado / Me / el → ________
+2. parque / al / Vamos / jugar / a → ________
+
+### ✏️ Completa la Oración
+8 oraciones con una o dos palabras faltantes y un banco de palabras:
+1. El ________ ladra en el ________.
+Banco: perro, jardín, gato, casa
+
+### 📝 De la Imagen a la Oración
+Describe 5 escenas simples (emoji + descripción) y el niño escribe una oración sobre cada una:
+1. 🐱 Un gato durmiendo en un sofá → ________
+2. 🌧️ Niños jugando bajo la lluvia → ________
+
+### 🔗 Une y Forma
+Dos columnas. El niño une el inicio con el final correcto:
+| Inicio | Final |
+|--------|-------|
+| El perro | muy bonitas |
+| Las flores son | corre en el parque |
+(8 pares)
+
+### ✍️ Inventa tus Oraciones
+5 palabras clave. El niño escribe una oración con cada una:
+1. Con la palabra "aventura": ________
+2. Con la palabra "familia": ________
+
+### ✅ Respuestas`,
+
+    copia: `Crea un ejercicio de COPIA CREATIVA para niños de ${age} años.
+
+ESTRUCTURA OBLIGATORIA:
+
+## 🖊️ Copia Creativa
+
+### 🌟 Frases Bonitas para Copiar
+6 frases motivadoras, refranes o dichos populares adaptados a la edad. Debajo de cada frase, línea para copiar:
+1. "El que lee mucho, sabe mucho."
+________
+
+### 🗣️ Trabalenguas
+4 trabalenguas divertidos adaptados a la edad. Debajo de cada uno, espacio para copiar:
+1. "Tres tristes tigres tragaban trigo en un trigal."
+________
+________
+
+### 📜 Poema Corto
+Un poema de 4-6 versos. El niño lo copia verso por verso en las líneas:
+(poema)
+________
+________
+________
+________
+
+### 🎨 Ahora Crea el Tuyo
+Instrucción para que el niño escriba:
+- Su propio refrán inventado: ________
+- Su propio trabalenguas: ________  ________
+- Sus propios versos (4 líneas): ________ ________ ________ ________
+
+### ✨ Letra Decorada
+Elige 3 palabras bonitas (AMOR, FAMILIA, ALEGRÍA). El niño debe escribirlas en letra grande y decorarlas con colores. Incluye un espacio: [ESPACIO PARA LETRAS DECORADAS]`,
+  };
+
+  const specificPrompt = typePrompts[writingType] || typePrompts['caligrafia'];
+
+  const systemPrompt = `Actúa como un maestro especialista en caligrafía y ortografía infantil para niños de ${age} años.
+
+═══ NIVEL DEL NIÑO ═══
+${levelGuide}
+
+═══ TIPO DE EJERCICIO: ${writingLabel} ═══
+${specificPrompt}
+
+═══ REGLAS GENERALES ═══
+- Todo en ESPAÑOL
+- Usa emojis en los títulos de sección
+- El contenido debe ser PRÁCTICO para completar A MANO en papel impreso
+- Incluye SIEMPRE líneas de escritura (________) donde el niño deba escribir
+- Las líneas deben ser suficientemente largas para que un niño escriba
+- Adapta TODO el vocabulario y la complejidad a ${age} años
+- Usa temas divertidos y cotidianos que motiven al niño
+- Incluye mensajes de ánimo ("¡Muy bien!", "¡Tu letra mejora cada día!")
+- Formato: Markdown limpio con tablas cuando sea necesario
+- Genera SOLO Markdown`;
 
   const parts: any[] = [{ text: systemPrompt }];
-  if (materialText) parts.push({ text: `Material de referencia:\n${materialText}` });
+  if (materialText) parts.push({ text: `Material de referencia o tema solicitado:\n${materialText}` });
   files.forEach(file => { parts.push({ inlineData: { mimeType: file.mimeType, data: file.data } }); });
 
   const response = await ai.models.generateContent({
@@ -562,4 +810,163 @@ REGLAS ESTRICTAS:
   }
 
   throw new Error("No se pudo generar la imagen. La IA no devolvió una imagen. Intenta con otra descripción o categoría.");
+}
+
+// ════════════════════════════════════════════════════════════
+//  Worksheets — formatos y categorías
+// ════════════════════════════════════════════════════════════
+export const WORKSHEET_FORMATS = [
+  { key: 'table-fill', label: 'Tabla + Completar', emoji: '📊', desc: 'Tabla visual con imágenes y oraciones para completar basándose en la tabla' },
+  { key: 'match', label: 'Unir Columnas', emoji: '🔗', desc: 'Dos columnas con palabras/imágenes para conectar con líneas' },
+  { key: 'multiple-choice', label: 'Selección Múltiple', emoji: '✅', desc: 'Preguntas con opciones ilustradas para marcar la correcta' },
+  { key: 'classify', label: 'Clasificar', emoji: '📦', desc: 'Categorías con elementos para recortar y pegar o escribir en el grupo correcto' },
+  { key: 'order', label: 'Ordenar', emoji: '🔢', desc: 'Secuencias, pasos o palabras para poner en el orden correcto' },
+  { key: 'circle', label: 'Rodea / Tacha', emoji: '⭕', desc: 'Rodea la respuesta correcta o tacha la incorrecta entre opciones ilustradas' },
+] as const;
+
+export type WorksheetFormat = typeof WORKSHEET_FORMATS[number]['key'];
+export type WorksheetLang = 'es' | 'en' | 'both';
+
+// ════════════════════════════════════════════════════════════
+//  Worksheets — generar imagen de worksheet (2 pasos)
+//  Paso 1: modelo de texto genera TODO el contenido exacto
+//  Paso 2: modelo de imagen renderiza el worksheet con ese texto
+// ════════════════════════════════════════════════════════════
+export async function generateWorksheetImage(
+  topic: string,
+  format: WorksheetFormat,
+  lang: WorksheetLang,
+  age: string,
+  description: string
+): Promise<string | null> {
+  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+  if (!apiKey) return null;
+
+  const ai = new GoogleGenAI({ apiKey });
+
+  const formatLabel = WORKSHEET_FORMATS.find(f => f.key === format)?.label || format;
+
+  const langInstruction = lang === 'en'
+    ? 'ALL text must be in ENGLISH. Write everything in English.'
+    : lang === 'both'
+    ? 'The worksheet must be BILINGUAL: each instruction and content item in both English and Spanish.'
+    : 'Todo el texto debe estar en ESPAÑOL.';
+
+  const formatStructures: Record<string, string> = {
+    'table-fill': `FORMATO: TABLA + COMPLETAR ORACIONES
+Genera:
+- Un título para la hoja
+- Una instrucción clara (ej: "Look at the table and complete with can or can't")
+- TABLA: define 4-5 acciones/verbos como encabezados de columna y 3-4 nombres de personajes como filas. Para cada celda indica ✓ o ✗.
+- 8-10 oraciones numeradas con espacios en blanco (_____) que se completan con la info de la tabla.
+- Las respuestas correctas de cada oración.`,
+
+    'match': `FORMATO: UNIR CON LÍNEAS
+Genera:
+- Un título para la hoja
+- Una instrucción clara (ej: "Draw a line to match")
+- COLUMNA A: 6-8 palabras o descripciones de imágenes
+- COLUMNA B: las mismas 6-8 respuestas en ORDEN DIFERENTE
+- Las parejas correctas.`,
+
+    'multiple-choice': `FORMATO: SELECCIÓN MÚLTIPLE
+Genera:
+- Un título para la hoja
+- Una instrucción clara
+- 6-8 preguntas, cada una con 3-4 opciones (a, b, c, d). Indica cuál es la correcta.
+- Describe qué imagen/dibujo acompaña cada pregunta.`,
+
+    'classify': `FORMATO: CLASIFICAR
+Genera:
+- Un título para la hoja
+- Una instrucción clara (ej: "Write each word in the correct group")
+- 2-4 nombres de categorías
+- 12-15 palabras/elementos para clasificar
+- La clasificación correcta.`,
+
+    'order': `FORMATO: ORDENAR
+Genera:
+- Un título para la hoja
+- Una instrucción clara (ej: "Number the steps in order")
+- 3-4 ejercicios de secuencia, cada uno con 4-5 pasos desordenados
+- Describe qué imagen acompaña cada paso
+- El orden correcto.`,
+
+    'circle': `FORMATO: RODEA / TACHA
+Genera:
+- Un título para la hoja
+- Una instrucción clara (ej: "Circle the correct answer")
+- 6-8 filas, cada una con una pregunta/categoría y 3-5 opciones (describe las imágenes)
+- Indica cuál se debe rodear/tachar.`,
+  };
+
+  const specificStructure = formatStructures[format] || formatStructures['table-fill'];
+
+  // ═══ PASO 1: Generar el contenido textual perfecto ═══
+  const textPrompt = `Eres un diseñador de material educativo para niños de ${age} años.
+Genera el CONTENIDO TEXTUAL COMPLETO para una hoja de trabajo (worksheet).
+
+TEMA: ${topic}
+${description ? `DETALLE: ${description}` : ''}
+${langInstruction}
+
+${specificStructure}
+
+REGLAS:
+- Cada palabra, oración, instrucción y opción debe estar PERFECTAMENTE escrita sin errores
+- Vocabulario y complejidad adaptados a ${age} años
+- Contenido divertido y motivador
+- Sé MUY específico: escribe el texto EXACTO que irá en la hoja
+
+Devuelve el contenido en formato estructurado y claro.`;
+
+  const textResponse = await ai.models.generateContent({
+    model: MODEL,
+    contents: { role: "user", parts: [{ text: textPrompt }] },
+  });
+
+  const worksheetContent = textResponse.text || '';
+  if (!worksheetContent) {
+    throw new Error("No se pudo generar el contenido del worksheet.");
+  }
+
+  // ═══ PASO 2: Generar la imagen usando el contenido exacto ═══
+  const imagePrompt = `Genera una HOJA DE TRABAJO EDUCATIVA (worksheet) como IMAGEN para niños de ${age} años.
+
+IMPORTANTE — TEXTO EXACTO: Debes reproducir EXACTAMENTE el siguiente contenido textual en la imagen. NO cambies, inventes ni alteres ninguna palabra, número u oración. Copia cada texto CARÁCTER POR CARÁCTER:
+
+--- INICIO DEL CONTENIDO EXACTO ---
+${worksheetContent}
+--- FIN DEL CONTENIDO EXACTO ---
+
+═══ REGLAS DE DISEÑO ═══
+- Reproduce TODO el texto anterior de forma EXACTA y LEGIBLE — es lo más importante
+- Tipografía grande, clara y perfectamente legible (estilo libro de texto escolar)
+- Cada letra, palabra y oración deben ser NÍTIDAS y sin errores
+- La imagen debe parecer una hoja de trabajo PROFESIONAL de editorial educativa
+- ORIENTACIÓN VERTICAL (portrait), tamaño carta, fondo BLANCO
+- Incluye DIBUJOS COLORIDOS estilo cartoon infantil amigable donde el contenido lo indique
+- Tablas con bordes definidos y celdas espaciadas
+- Los espacios en blanco para escribir deben ser LÍNEAS LARGAS claramente visibles (____________)
+- Los checks deben ser ✓ verdes dentro de círculos verdes y las cruces ✗ rojas dentro de círculos rojos
+- Diseño limpio, organizado, con buena jerarquía visual
+- La hoja debe verse COMPLETA y lista para imprimir`;
+
+  const imageResponse = await ai.models.generateContent({
+    model: IMAGE_MODEL,
+    contents: {
+      parts: [{ text: imagePrompt }],
+    },
+    config: {
+      responseModalities: ['image', 'text'],
+    },
+  });
+
+  for (const part of imageResponse.candidates?.[0]?.content?.parts || []) {
+    if (part.inlineData) {
+      return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+    }
+  }
+
+  throw new Error("No se pudo generar el worksheet. Intenta con otro tema o formato.");
 }
