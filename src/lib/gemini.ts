@@ -474,15 +474,23 @@ export async function generateWritingMaterial(
 // ════════════════════════════════════════════════════════════
 export const COLORING_CATEGORIES = [
   { key: 'animales', label: 'Animales', emoji: '🐾' },
-  { key: 'cartoon', label: 'Cartoon', emoji: '📺' },
+  { key: 'dinosaurios', label: 'Dinosaurios', emoji: '🦕' },
+  { key: 'mar', label: 'Vida Marina', emoji: '🐠' },
+  { key: 'granja', label: 'Granja', emoji: '🐔' },
+  { key: 'selva', label: 'Selva', emoji: '🦁' },
+  { key: 'insectos', label: 'Insectos', emoji: '🦋' },
+  { key: 'espacio', label: 'Espacio', emoji: '🚀' },
+  { key: 'vehiculos', label: 'Vehículos', emoji: '🚗' },
+  { key: 'castillos', label: 'Castillos', emoji: '🏰' },
+  { key: 'robots', label: 'Robots', emoji: '🤖' },
+  { key: 'piratas', label: 'Piratas', emoji: '🏴‍☠️' },
+  { key: 'flores', label: 'Flores', emoji: '🌸' },
+  { key: 'comida', label: 'Comida', emoji: '🍕' },
+  { key: 'deportes', label: 'Deportes', emoji: '⚽' },
+  { key: 'fantasia', label: 'Fantasía', emoji: '🧚' },
   { key: 'anime', label: 'Anime', emoji: '⭐' },
   { key: 'looney-tunes', label: 'Looney Tunes', emoji: '🐰' },
-  { key: 'simpsons', label: 'Simpsons', emoji: '🍩' },
   { key: 'chavo', label: 'Chavo Animado', emoji: '🪣' },
-  { key: 'disney', label: 'Disney', emoji: '🏰' },
-  { key: 'superheroes', label: 'Superhéroes', emoji: '🦸' },
-  { key: 'dinosaurios', label: 'Dinosaurios', emoji: '🦕' },
-  { key: 'espacio', label: 'Espacio', emoji: '🚀' },
 ] as const;
 
 export type ColoringCategory = typeof COLORING_CATEGORIES[number]['key'];
