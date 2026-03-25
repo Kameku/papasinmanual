@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#065f46"/>
+      <stop offset="100%" style="stop-color:#34d399"/>
+    </linearGradient>
+    <linearGradient id="accent8" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg8)"/>
+  <circle cx="200" cy="100" r="250" fill="url(#accent8)" opacity="0.2"/>
+  <circle cx="1000" cy="530" r="200" fill="url(#accent8)" opacity="0.15"/>
+  <!-- Scissors icon -->
+  <circle cx="490" cy="250" r="25" fill="none" stroke="#fff" stroke-width="4" opacity="0.7"/>
+  <circle cx="490" cy="320" r="25" fill="none" stroke="#fff" stroke-width="4" opacity="0.7"/>
+  <line x1="510" y1="240" x2="580" y2="180" stroke="#fff" stroke-width="4" opacity="0.7"/>
+  <line x1="510" y1="330" x2="580" y2="180" stroke="#fff" stroke-width="4" opacity="0.7"/>
+  <!-- Paint brush -->
+  <rect x="620" y="180" width="16" height="100" rx="4" fill="#fbbf24" opacity="0.8" transform="rotate(15, 628, 230)"/>
+  <rect x="614" y="280" width="28" height="50" rx="6" fill="#92400e" opacity="0.7" transform="rotate(15, 628, 305)"/>
+  <!-- Crayon -->
+  <rect x="700" y="200" width="14" height="90" rx="3" fill="#ef4444" opacity="0.7" transform="rotate(-10, 707, 245)"/>
+  <polygon points="700,200 714,200 707,170" fill="#ef4444" opacity="0.7" transform="rotate(-10, 707, 185)"/>
+  <!-- Paper/craft shapes -->
+  <rect x="530" y="360" width="140" height="100" rx="4" fill="#fff" opacity="0.12"/>
+  <polygon points="600,350 540,410 660,410" fill="#60a5fa" opacity="0.3"/>
+  <circle cx="650" cy="400" r="20" fill="#f472b6" opacity="0.4"/>
+  <rect x="550" y="420" width="40" height="40" rx="2" fill="#a78bfa" opacity="0.3"/>
+  <!-- Stars decoration -->
+  <polygon points="800,250 808,270 830,270 812,282 820,302 800,290 780,302 788,282 770,270 792,270" fill="#fbbf24" opacity="0.5"/>
+  <polygon points="450,160 455,175 470,175 458,183 462,198 450,190 438,198 442,183 430,175 445,175" fill="#fbbf24" opacity="0.4"/>
+  <!-- Title -->
+  <text x="600" y="540" font-family="Arial, sans-serif" font-size="32" fill="#fff" text-anchor="middle" font-weight="bold" opacity="0.9">Manualidades en el desarrollo infantil</text>
+  <text x="600" y="580" font-family="Arial, sans-serif" font-size="20" fill="#d1fae5" text-anchor="middle" opacity="0.7">Creatividad, motricidad y conexión</text>
+</svg>

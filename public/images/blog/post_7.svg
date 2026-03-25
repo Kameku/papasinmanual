@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f"/>
+      <stop offset="100%" style="stop-color:#4a90d9"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="900" cy="150" r="200" fill="url(#accent)" opacity="0.3"/>
+  <circle cx="300" cy="500" r="150" fill="url(#accent)" opacity="0.2"/>
+  <!-- Moon/night icon -->
+  <circle cx="600" cy="240" r="80" fill="#f59e0b" opacity="0.9"/>
+  <circle cx="630" cy="220" r="70" fill="#2d5a8e"/>
+  <!-- Stars -->
+  <circle cx="450" cy="180" r="4" fill="#fff" opacity="0.8"/>
+  <circle cx="750" cy="160" r="3" fill="#fff" opacity="0.7"/>
+  <circle cx="520" cy="130" r="5" fill="#fff" opacity="0.6"/>
+  <circle cx="700" cy="280" r="3" fill="#fff" opacity="0.5"/>
+  <circle cx="480" cy="260" r="4" fill="#fff" opacity="0.7"/>
+  <!-- Phone/screen icon -->
+  <rect x="555" y="340" width="90" height="140" rx="10" fill="#fff" opacity="0.15"/>
+  <rect x="565" y="355" width="70" height="100" rx="4" fill="#60a5fa" opacity="0.3"/>
+  <!-- X mark over phone -->
+  <line x1="540" y1="330" x2="660" y2="490" stroke="#ef4444" stroke-width="6" opacity="0.7"/>
+  <line x1="660" y1="330" x2="540" y2="490" stroke="#ef4444" stroke-width="6" opacity="0.7"/>
+  <!-- ZZZ sleep symbols -->
+  <text x="700" y="350" font-family="Arial, sans-serif" font-size="28" fill="#fff" opacity="0.5" font-weight="bold">z</text>
+  <text x="730" y="320" font-family="Arial, sans-serif" font-size="36" fill="#fff" opacity="0.6" font-weight="bold">z</text>
+  <text x="770" y="285" font-family="Arial, sans-serif" font-size="44" fill="#fff" opacity="0.7" font-weight="bold">z</text>
+  <!-- Title text -->
+  <text x="600" y="560" font-family="Arial, sans-serif" font-size="32" fill="#fff" text-anchor="middle" font-weight="bold" opacity="0.9">Pantallas antes de dormir</text>
+  <text x="600" y="600" font-family="Arial, sans-serif" font-size="20" fill="#e2e8f0" text-anchor="middle" opacity="0.7">El enemigo silencioso del sueño infantil</text>
+</svg>
