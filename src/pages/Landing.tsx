@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Brain, BookOpenCheck, PenLine, Pencil, ArrowRight, Heart, Tv, BookOpen, Users, Shield } from 'lucide-react';
 import DonationModal from '../components/DonationModal';
+import SEOHead from '../components/SEOHead';
+import Disclaimer from '../components/Disclaimer';
 
 const TOOLS = [
   { 
@@ -59,6 +61,24 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-sky-50">
+      <SEOHead
+        title="Un Papá Sin Manual — Herramientas Educativas Gratuitas para Padres"
+        description="Herramientas educativas gratuitas creadas por un padre para padres. Guías de estudio, exámenes, lecturas y ejercicios de escritura para niños. Menos pantallas, más aprendizaje real."
+        path="/"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'Un Papá Sin Manual',
+          url: 'https://unpapasinmanual.com',
+          description: 'Herramientas educativas gratuitas creadas por un padre para padres.',
+          inLanguage: 'es',
+          publisher: {
+            '@type': 'Organization',
+            name: 'Un Papá Sin Manual',
+            url: 'https://unpapasinmanual.com',
+          },
+        }}
+      />
 
       {/* ══════ HERO ══════ */}
       <section className="relative overflow-hidden bg-gradient-to-br from-sky-500 via-sky-600 to-sky-700 text-white">
@@ -347,6 +367,13 @@ export default function Landing() {
 
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ══════ DISCLAIMER ══════ */}
+      <section className="pb-8 sm:pb-10 pt-0">
+        <div className="max-w-3xl mx-auto px-4">
+          <Disclaimer />
         </div>
       </section>
 

@@ -4,6 +4,7 @@ import { BookOpen, GraduationCap, Printer, RefreshCcw, Pencil, Brain, Download, 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { generateAndDownloadPdf } from './lib/pdf';
+import SEOHead from './components/SEOHead';
 import {
   generateStudyGuide,
   generateExamMaterial,
@@ -327,6 +328,25 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-sky-50 px-3 py-4 sm:p-4 md:p-8 font-sans text-slate-700">
+      <SEOHead
+        title="Herramientas Educativas"
+        description="Genera guías de estudio, exámenes prácticos, lecturas y ejercicios de escritura personalizados para tus hijos. Herramientas educativas gratuitas para imprimir."
+        path="/herramientas"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'WebApplication',
+          name: 'Herramientas Educativas - Un Papá Sin Manual',
+          description: 'Genera material educativo personalizado: guías de estudio, exámenes, lecturas y ejercicios de escritura para niños.',
+          url: 'https://unpapasinmanual.com/herramientas',
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'Web',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+          },
+        }}
+      />
       <div className="max-w-4xl mx-auto">
 
         {/* Page Title */}

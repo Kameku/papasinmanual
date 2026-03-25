@@ -2,10 +2,28 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BLOG_POSTS } from '../data/blog';
+import SEOHead from '../components/SEOHead';
 
 export default function Blog() {
   return (
     <div className="min-h-screen bg-sky-50">
+      <SEOHead
+        title="Blog — Crianza, Educación y Menos Pantallas"
+        description="Reflexiones, experiencias y debates sobre crianza responsable, educación infantil y el impacto de las pantallas en nuestros hijos. Artículos de Un Papá Sin Manual."
+        path="/blog"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Blog - Un Papá Sin Manual',
+          description: 'Artículos sobre crianza, educación responsable y menos pantallas.',
+          url: 'https://unpapasinmanual.com/blog',
+          isPartOf: {
+            '@type': 'WebSite',
+            name: 'Un Papá Sin Manual',
+            url: 'https://unpapasinmanual.com',
+          },
+        }}
+      />
       <div className="max-w-5xl mx-auto px-3 sm:px-4 py-8 sm:py-12">
         <div className="mb-3 sm:mb-4">
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-sky-600 transition-colors">

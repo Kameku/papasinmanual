@@ -1,10 +1,16 @@
 import { motion } from 'motion/react';
 import { LogIn, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEOHead from '../components/SEOHead';
 
 export default function Login() {
   return (
     <div className="min-h-screen bg-sky-50 flex items-center justify-center px-4 py-8">
+      <SEOHead
+        title="Ingresar"
+        description="Accede a tu cuenta en Un Papá Sin Manual. Próximamente: dashboard personal para guardar materiales educativos."
+        path="/login"
+      />
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
