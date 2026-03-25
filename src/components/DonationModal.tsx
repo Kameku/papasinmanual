@@ -101,7 +101,7 @@ export default function DonationModal({ open, onClose }: DonationModalProps) {
 
                 {/* Firma */}
                 <p className="text-slate-400 text-xs italic">
-                  — Con gratitud, Un Papá Sin Manual ❤️
+                  — Con gratitud, Solo un Papá REAL ❤️
                 </p>
               </div>
             </div>

@@ -64,7 +64,7 @@ export default function BlogPost() {
         description={post.excerpt}
         path={`/blog/${post.slug}`}
         type="article"
-        image={post.coverImage.startsWith('http') ? post.coverImage : `https://unpapasinmanual.com${post.coverImage}`}
+        image={post.coverImage.startsWith('http') ? post.coverImage : `https://solounpapareal.com${post.coverImage}`}
         publishedTime={post.date}
         author={post.author}
       />

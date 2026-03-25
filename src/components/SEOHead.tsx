@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_NAME = 'Un Papá Sin Manual';
-const SITE_URL = 'https://unpapasinmanual.com';
+const SITE_NAME = 'Solo un Papá REAL';
+const SITE_URL = 'https://solounpapareal.com';
 const DEFAULT_IMAGE = `${SITE_URL}/icon.svg`;
 
 interface SEOHeadProps {

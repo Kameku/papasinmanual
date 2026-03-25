@@ -11,7 +11,7 @@ export interface ExamOptions {
   lang: 'es' | 'en' | 'both';
 }
 
-export type MenuSection = 'guide' | 'exam' | 'reading' | 'writing' | 'coloring' | 'worksheet';
+export type MenuSection = 'book' | 'guide' | 'exam' | 'reading' | 'writing' | 'coloring' | 'worksheet';
 
 const MODEL = "gemini-3.1-pro-preview";
 const IMAGE_MODEL = "gemini-3-pro-image-preview";
@@ -22,6 +22,247 @@ function getApiClient() {
     throw new Error("Gemini API key not found");
   }
   return new GoogleGenAI({ apiKey });
+}
+
+// ════════════════════════════════════════════════════════════
+//  Libro Ilustrado de la Semana
+// ════════════════════════════════════════════════════════════
+export interface BookChapter {
+  day: number;
+  title: string;
+  content: string;
+  image: string | null;
+}
+
+export interface GeneratedBook {
+  bookTitle: string;
+  coverImage: string | null;
+  chapters: BookChapter[];
+}
+
+export async function generateWeeklyBook(
+  theme: string,
+  age: string,
+  onProgress?: (step: string) => void
+): Promise<GeneratedBook> {
+  const ai = getApiClient();
+
+  const ageNum = parseInt(age) || 8;
+
+  // Adaptar extensión según edad
+  let lengthGuide: string;
+  if (ageNum <= 5) {
+    lengthGuide = 'Cada capítulo: 80-120 palabras. Oraciones muy cortas (4-6 palabras). Vocabulario básico. Mucha repetición y ritmo.';
+  } else if (ageNum <= 7) {
+    lengthGuide = 'Cada capítulo: 150-250 palabras. Oraciones simples y claras. Diálogos cortos. Vocabulario sencillo con 2-3 palabras nuevas por capítulo.';
+  } else if (ageNum <= 9) {
+    lengthGuide = 'Cada capítulo: 300-450 palabras. Oraciones variadas, algunos diálogos. Vocabulario rico pero accesible. Descripciones que estimulen la imaginación.';
+  } else {
+    lengthGuide = 'Cada capítulo: 450-600 palabras. Oraciones complejas, diálogos elaborados. Vocabulario desafiante. Descripciones detalladas y giros narrativos.';
+  }
+
+  // ═══ PASO 1: Generar la historia completa en 7 capítulos ═══
+  onProgress?.('Escribiendo la historia...');
+
+  const storyPrompt = `Eres un autor de literatura infantil premiado. Escribe un LIBRO ILUSTRADO completo para niños de ${age} años.
+
+TEMA / INTERÉS DEL NIÑO: "${theme}"
+
+El libro está diseñado para leerse en UNA SEMANA: un capítulo por día, cada sesión de lectura de ~20 minutos.
+
+═══ ESTRUCTURA: 7 CAPÍTULOS (uno por día) ═══
+
+${lengthGuide}
+
+REGLAS NARRATIVAS:
+- Historia ORIGINAL, cautivadora y con valores positivos
+- Personajes memorables con nombres y personalidades definidas
+- Cada capítulo termina con un pequeño suspenso o pregunta que motiva a leer el siguiente día
+- Arco narrativo completo: presentación (días 1-2), conflicto/aventura (días 3-5), clímax y resolución (días 6-7)
+- El tema "${theme}" debe ser el eje central de la historia
+- Incluye emociones, humor y momentos tiernos
+- SIN preguntas de comprensión, SIN vocabulario, SIN ejercicios — SOLO la historia pura
+- Lenguaje hermoso pero adaptado a ${age} años
+
+FORMATO DE RESPUESTA — responde EXACTAMENTE así:
+
+TÍTULO: [título del libro]
+
+---DÍA 1---
+CAPÍTULO: [título del capítulo 1]
+[texto completo del capítulo 1]
+ILUSTRACIÓN: [descripción detallada de la ilustración ideal para este capítulo: personajes, escena, colores, emociones, ambiente]
+
+---DÍA 2---
+CAPÍTULO: [título del capítulo 2]
+[texto completo del capítulo 2]
+ILUSTRACIÓN: [descripción detallada]
+
+---DÍA 3---
+CAPÍTULO: [título del capítulo 3]
+[texto completo del capítulo 3]
+ILUSTRACIÓN: [descripción detallada]
+
+---DÍA 4---
+CAPÍTULO: [título del capítulo 4]
+[texto completo del capítulo 4]
+ILUSTRACIÓN: [descripción detallada]
+
+---DÍA 5---
+CAPÍTULO: [título del capítulo 5]
+[texto completo del capítulo 5]
+ILUSTRACIÓN: [descripción detallada]
+
+---DÍA 6---
+CAPÍTULO: [título del capítulo 6]
+[texto completo del capítulo 6]
+ILUSTRACIÓN: [descripción detallada]
+
+---DÍA 7---
+CAPÍTULO: [título del capítulo 7]
+[texto completo del capítulo 7]
+ILUSTRACIÓN: [descripción detallada]`;
+
+  const storyResponse = await ai.models.generateContent({
+    model: MODEL,
+    contents: { role: "user", parts: [{ text: storyPrompt }] },
+  });
+
+  const storyText = storyResponse.text || '';
+  if (!storyText) throw new Error("No se pudo generar la historia.");
+
+  // ═══ PARSEAR los capítulos ═══
+  const bookTitleMatch = storyText.match(/TÍTULO:\s*(.+)/);
+  const bookTitle = bookTitleMatch ? bookTitleMatch[1].trim() : theme;
+
+  const chapters: BookChapter[] = [];
+  for (let day = 1; day <= 7; day++) {
+    const dayRegex = new RegExp(`---DÍA ${day}---\\s*\\n?CAPÍTULO:\\s*(.+?)\\n([\\s\\S]*?)ILUSTRACIÓN:\\s*([\\s\\S]*?)(?=---DÍA \\d|$)`, 'i');
+    const match = storyText.match(dayRegex);
+    if (match) {
+      chapters.push({
+        day,
+        title: match[1].trim(),
+        content: match[2].trim(),
+        image: null, // se llenará después
+      });
+    } else {
+      // Fallback parsing
+      const simpleRegex = new RegExp(`---DÍA ${day}---([\\s\\S]*?)(?=---DÍA \\d|$)`, 'i');
+      const simpleMatch = storyText.match(simpleRegex);
+      if (simpleMatch) {
+        const block = simpleMatch[1].trim();
+        const titleLine = block.match(/CAPÍTULO:\s*(.+)/);
+        const illustrationIdx = block.indexOf('ILUSTRACIÓN:');
+        const content = illustrationIdx > -1 ? block.substring(0, illustrationIdx) : block;
+        chapters.push({
+          day,
+          title: titleLine ? titleLine[1].trim() : `Día ${day}`,
+          content: content.replace(/CAPÍTULO:\s*.+\n?/, '').trim(),
+          image: null,
+        });
+      }
+    }
+  }
+
+  if (chapters.length === 0) throw new Error("No se pudieron extraer los capítulos de la historia.");
+
+  // ═══ PASO 2: Generar portada + ilustraciones ═══
+  let coverImage: string | null = null;
+  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+  if (apiKey) {
+    const imageAi = new GoogleGenAI({ apiKey });
+
+    // Portada del libro
+    onProgress?.('Diseñando la portada...');
+    try {
+      const coverResponse = await imageAi.models.generateContent({
+        model: IMAGE_MODEL,
+        contents: {
+          parts: [{
+            text: `Crea una PORTADA DE LIBRO INFANTIL profesional y hermosa.
+
+TÍTULO DEL LIBRO: "${bookTitle}"
+TEMA: "${theme}"
+PARA NIÑOS DE: ${age} años
+
+ESTILO:
+- Portada de libro infantil de editorial profesional (tipo portada de librería)
+- Ilustración central que capture la esencia de la historia
+- Colores vibrantes, mágicos y llamativos
+- Estilo acuarela digital o ilustración moderna (Oliver Jeffers, Beatrice Alemagna)
+- Personajes principales del libro en pose dinámica y expresiva
+- Atmósfera cálida, invitante y mágica que haga al niño querer abrir el libro
+- Composición vertical (portrait) como portada real
+- NO incluir texto, NI título, NI letras — SOLO la ilustración
+- Calidad de impresión editorial profesional
+- Debe transmitir aventura, emoción y magia`,
+          }],
+        },
+        config: {
+          responseModalities: ['image', 'text'],
+        },
+      });
+
+      for (const part of coverResponse.candidates?.[0]?.content?.parts || []) {
+        if (part.inlineData) {
+          coverImage = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+          break;
+        }
+      }
+    } catch (err) {
+      console.error("Error generating cover:", err);
+    }
+
+    // Ilustraciones de capítulos
+    for (let i = 0; i < chapters.length; i++) {
+      onProgress?.(`Ilustrando día ${i + 1} de 7...`);
+
+      // Extraer descripción de ilustración del texto original
+      const dayBlock = storyText.match(new RegExp(`---DÍA ${i + 1}---[\\s\\S]*?ILUSTRACIÓN:\\s*([\\s\\S]*?)(?=---DÍA \\d|$)`, 'i'));
+      const illustrationDesc = dayBlock ? dayBlock[1].trim() : chapters[i].content.substring(0, 200);
+
+      try {
+        const imgResponse = await imageAi.models.generateContent({
+          model: IMAGE_MODEL,
+          contents: {
+            parts: [{
+              text: `Crea una ilustración HERMOSA para un libro infantil para niños de ${age} años.
+
+LIBRO: "${bookTitle}"
+CAPÍTULO ${i + 1}: "${chapters[i].title}"
+
+ESCENA A ILUSTRAR: ${illustrationDesc}
+
+ESTILO ARTÍSTICO:
+- Ilustración digital profesional de ALTA CALIDAD estilo libro infantil de editorial
+- Colores vibrantes, cálidos y armoniosos tipo acuarela digital
+- Personajes expresivos, tiernos y con personalidad — estilo moderno (como libros de Oliver Jeffers, Jon Klassen o Beatrice Alemagna)
+- Composición cinematográfica con profundidad y atmósfera
+- Iluminación cálida y mágica
+- SIN texto en la imagen
+- Formato horizontal (landscape) 16:9
+- La ilustración debe transmitir la emoción del capítulo y cautivar al niño`,
+            }],
+          },
+          config: {
+            responseModalities: ['image', 'text'],
+          },
+        });
+
+        for (const part of imgResponse.candidates?.[0]?.content?.parts || []) {
+          if (part.inlineData) {
+            chapters[i].image = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+            break;
+          }
+        }
+      } catch (err) {
+        console.error(`Error generating illustration for day ${i + 1}:`, err);
+      }
+    }
+  }
+
+  return { bookTitle, coverImage, chapters };
 }
 
 // ════════════════════════════════════════════════════════════

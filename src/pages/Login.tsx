@@ -8,7 +8,7 @@ export default function Login() {
     <div className="min-h-screen bg-sky-50 flex items-center justify-center px-4 py-8">
       <SEOHead
         title="Ingresar"
-        description="Accede a tu cuenta en Un Papá Sin Manual. Próximamente: dashboard personal para guardar materiales educativos."
+        description="Accede a tu cuenta en Solo un Papá REAL. Próximamente: dashboard personal para guardar materiales educativos."
         path="/login"
       />
       <motion.div

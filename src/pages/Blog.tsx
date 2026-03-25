@@ -53,18 +53,18 @@ export default function Blog() {
     <main className="min-h-screen bg-slate-50">
       <SEOHead
         title={activeTag ? `${activeTag} — Blog` : 'Blog — Crianza, Educación y Menos Pantallas'}
-        description="Reflexiones, experiencias y debates sobre crianza responsable, educación infantil y el impacto de las pantallas en nuestros hijos. Artículos de Un Papá Sin Manual."
+        description="Reflexiones, experiencias y debates sobre crianza responsable, educación infantil y el impacto de las pantallas en nuestros hijos. Artículos de Solo un Papá REAL."
         path="/blog"
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',
-          name: 'Blog - Un Papá Sin Manual',
+          name: 'Blog - Solo un Papá REAL',
           description: 'Artículos sobre crianza, educación responsable y menos pantallas.',
-          url: 'https://unpapasinmanual.com/blog',
+          url: 'https://solounpapareal.com/blog',
           isPartOf: {
             '@type': 'WebSite',
-            name: 'Un Papá Sin Manual',
-            url: 'https://unpapasinmanual.com',
+            name: 'Solo un Papá REAL',
+            url: 'https://solounpapareal.com',
           },
         }}
       />

@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://unpapasinmanual.com/sitemap.xml
+Sitemap: https://solounpapareal.com/sitemap.xml

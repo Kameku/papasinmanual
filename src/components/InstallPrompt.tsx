@@ -121,7 +121,7 @@ export default function InstallPrompt() {
                 Instala la App
               </h3>
               <p className="text-slate-500 text-sm text-center mb-6 leading-relaxed">
-                Agrega <strong className="text-sky-600">Un Papá Sin Manual</strong> a tu pantalla de inicio para acceder más rápido y tener una mejor experiencia.
+                Agrega <strong className="text-sky-600">Solo un Papá REAL</strong> a tu pantalla de inicio para acceder más rápido y tener una mejor experiencia.
               </p>
 
               {isIOS ? (

@@ -1,4 +1,4 @@
-# 📚 Un Papá Sin Manual
+# 📚 Solo un Papá REAL
 
 > Herramientas educativas gratuitas con IA para padres. Genera guías de estudio, exámenes prácticos, lecturas y ejercicios de escritura personalizados para tus hijos, en segundos.
 
@@ -6,7 +6,7 @@
 
 ## ✨ ¿Qué es esto?
 
-**Un Papá Sin Manual** es una aplicación web progresiva (PWA) que usa la API de **Gemini AI** para generar material educativo personalizado según la edad del niño y la materia. Pensada para padres que quieren apoyar el aprendizaje de sus hijos en casa sin ser docentes.
+**Solo un Papá REAL** es una aplicación web progresiva (PWA) que usa la API de **Gemini AI** para generar material educativo personalizado según la edad del niño y la materia. Pensada para padres que quieren apoyar el aprendizaje de sus hijos en casa sin ser docentes.
 
 ---
 

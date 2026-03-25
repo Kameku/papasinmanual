@@ -17,7 +17,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: '3',
     slug: 'papa-sin-manual-experiencia',
-    title: 'Ser papá sin manual: mi experiencia real',
+    title: 'Solo un papá real: mi experiencia como padre',
     excerpt: 'Nadie te prepara para ser padre. Comparto los errores que cometí, lo que aprendí y por qué decidí crear herramientas para otros papás.',
     tag: 'Experiencia',
     color: 'bg-amber-50 text-amber-600',
@@ -27,9 +27,9 @@ export const BLOG_POSTS: BlogPost[] = [
     date: '24 de Marzo, 2026',
     author: 'Michael Angel',
     content: `
-Cuando sostuve a mi hijo por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no echarlo a perder, pero nadie lo hizo. 
+Cuando sostuve a mi hijo por primera vez, sentí un terror profundo mezclado con el amor más intenso que hubiera experimentado. Miré la habitación de hospital esperando que alguien me entregara el aclamado manual de instrucciones para no cagarla, pero nadie lo hizo. 
 
-El título de este proyecto, *"Un Papá Sin Manual"*, nace de esa cruda y humilde verdad: todos estamos improvisando. Al principio, recurrí a la salida fácil que toma buena parte de nuestra generación. Encendía la televisión para poder tener 20 minutos de paz y responder correos del trabajo. Funcionaba a corto plazo, pero notaba que los berrinches aumentaban tras apagar la pantalla. 
+El título de este proyecto, *"Solo un Papá REAL"*, nace de esa cruda y humilde verdad: todos estamos improvisando. Al principio, recurrí a la salida fácil que toma buena parte de nuestra generación. Encendía la televisión para poder tener 20 minutos de paz y responder correos del trabajo. Funcionaba a corto plazo, pero notaba que los berrinches aumentaban tras apagar la pantalla. 
 
 ### El cambio de rumbo
 Una tarde decidí desenchufar el televisor e imprimir hojas de trabajo básicas. Puse sobre la mesa una montaña de crayones. El primer día fue una batalla, pero al tercer día, él llegaba de la escuela pidiendo sus "tareas especiales". 
@@ -49,7 +49,7 @@ Hoy lo comparto con el mundo. Si sirve de algo, mi principal lección tras estos
     coverImage: '/images/blog/post_1.png',
     readTime: '4 min',
     date: '24 de Marzo, 2026',
-    author: 'Un Papá Sin Manual',
+    author: 'Solo un Papá REAL',
     content: `
 La llegada de las pantallas a los hogares modernos ha solucionado un problema a corto plazo para muchos padres: mantener a los niños entretenidos. Sin embargo, el costo a largo plazo que estamos pagando es innegable. 
 
@@ -72,7 +72,7 @@ Alejar a tu hijo de estas plataformas no significa que debas estar jugando con �
     coverImage: '/images/blog/post_2.png',
     readTime: '5 min',
     date: '24 de Marzo, 2026',
-    author: 'Un Papá Sin Manual',
+    author: 'Solo un Papá REAL',
     content: `
 La pedagogía tradicional insiste a menudo en mantener a los niños sentados, escuchando silenciosamente y memorizando información de un libro de texto. Sin embargo, la ciencia cognitiva moderna nos enseña que el cerebro humano —especialmente en sus primeras etapas de desarrollo— absorbe información infinitamente mejor a través del *aprendizaje activo*.
 
@@ -84,7 +84,7 @@ Cuando un niño aprende matemáticas sumando bloques de madera, su cerebro crea 
 ### ¿Cómo aplicarlo en casa?
 No necesitas ser maestro para promover la educación activa:
 1. **Convierte los repasos en juegos:** En lugar de preguntarle las capitales, jueguen a un mapa donde tengan que situar físicamente piezas.
-2. **Utiliza herramientas adaptadas:** Usa "Un Papá Sin Manual" para imprimir sopas de letras del vocabulario de ciencias o guías interactivas y retarlo a terminarlas en un tiempo específico.
+2. **Utiliza herramientas adaptadas:** Usa "Solo un Papá REAL" para imprimir sopas de letras del vocabulario de ciencias o guías interactivas y retarlo a terminarlas en un tiempo específico.
 3. **El aprendizaje es desordenado:** Acepta que aprender jugando involucra ruido temporal, risas y desorden sobre la mesa. Ese desorden es la prueba óptica de que un cerebro está siendo estimulado.
     `.trim()
   },
@@ -98,7 +98,7 @@ No necesitas ser maestro para promover la educación activa:
     coverImage: '/images/blog/post_4.png',
     readTime: '4 min',
     date: '24 de Marzo, 2026',
-    author: 'Un Papá Sin Manual',
+    author: 'Solo un Papá REAL',
     content: `
 A menudo caemos en el falso equilibrio de pensar que ver televisión educativa es un sustituto válido de un libro. La neurociencia ha probado ampliamente que los beneficios cognitivos de la lectura en papel no son replicables por el contenido audiovisual.
 
@@ -123,7 +123,7 @@ Ese es el poder del generador de *Lecturas a Medida*. Si a tu hijo le encantan l
     coverImage: '/images/blog/post_5.png',
     readTime: '5 min',
     date: '24 de Marzo, 2026',
-    author: 'Un Papá Sin Manual',
+    author: 'Solo un Papá REAL',
     content: `
 El síndrome de abstinencia digital es un reto real cuando los padres deciden retirar las pantallas. La clave del éxito no está en prohibir, sino en ofrecer alternativas más táctiles y placenteras. Aquí propongo 5 actividades prácticas que rescatan el enfoque de los más pequeños:
 
@@ -153,7 +153,7 @@ Genera una hoja con inicios de cuentos intrigantes y toma turnos para escribir (
     coverImage: '/images/blog/post_6.png',
     readTime: '6 min',
     date: '24 de Marzo, 2026',
-    author: 'Un Papá Sin Manual',
+    author: 'Solo un Papá REAL',
     content: `
 Un error común entre los padres modernos es creer que la educación de sus hijos ocurre de modo exclusivo dentro de un salón de clases entre las 8:00 AM y las 3:00 PM. Lo cierto es que el hogar es, indudablemente, el principal catalizador de cualquier éxito intelectual y emocional. 
 

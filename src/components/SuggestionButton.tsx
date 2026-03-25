@@ -87,8 +87,8 @@ export default function SuggestionButton() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
-          subject: `Sugerencia - Un Papá Sin Manual: ${tema}`,
-          from_name: 'Un Papá Sin Manual - Formulario de Sugerencias',
+          subject: `Sugerencia - Solo un Papá REAL: ${tema}`,
+          from_name: 'Solo un Papá REAL - Formulario de Sugerencias',
           to: RECIPIENT_EMAIL,
           tema: tema,
           observacion: observacion,

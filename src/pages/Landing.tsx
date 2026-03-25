@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Brain, BookOpenCheck, PenLine, Pencil, ArrowRight, Heart, Tv, BookOpen, Users, Shield } from 'lucide-react';
+import { Brain, BookOpenCheck, PenLine, Pencil, ArrowRight, Heart, Tv, BookOpen, Users, Shield, BookHeart, Sparkles, Clock, Download, Instagram, Youtube } from 'lucide-react';
 import DonationModal from '../components/DonationModal';
 import SEOHead from '../components/SEOHead';
 import Disclaimer from '../components/Disclaimer';
 
 const TOOLS = [
   { 
+    toolKey: 'guide',
     icon: <Brain className="w-10 h-10 sm:w-12 sm:h-12 text-white" />, 
     title: 'Guías de Estudio', 
     desc: 'Transforma cualquier tema aburrido en una actividad divertida para imprimir.',
@@ -19,6 +20,7 @@ const TOOLS = [
     howBg: 'bg-sky-700/20',
   },
   { 
+    toolKey: 'exam',
     icon: <Pencil className="w-10 h-10 sm:w-12 sm:h-12 text-white" />, 
     title: 'Exámenes Prácticos', 
     desc: 'Evalúa lo que han aprendido en casa sin la presión de la escuela.',
@@ -30,6 +32,7 @@ const TOOLS = [
     howBg: 'bg-orange-700/20',
   },
   { 
+    toolKey: 'reading',
     icon: <BookOpenCheck className="w-10 h-10 sm:w-12 sm:h-12 text-white" />, 
     title: 'Lecturas a Medida', 
     desc: 'Fomenta el hábito de la lectura con historias creadas especialmente para ellos.',
@@ -41,6 +44,7 @@ const TOOLS = [
     howBg: 'bg-emerald-700/20',
   },
   { 
+    toolKey: 'writing',
     icon: <PenLine className="w-10 h-10 sm:w-12 sm:h-12 text-white" />, 
     title: 'Caligrafía y Ortografía',
     desc: 'Mejora el trazo, la letra y la ortografía de tu hijo con ejercicios para imprimir.',
@@ -62,20 +66,20 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-sky-50">
       <SEOHead
-        title="Un Papá Sin Manual — Herramientas Educativas Gratuitas para Padres"
+        title="Solo un Papá REAL — Herramientas Educativas Gratuitas para Padres"
         description="Herramientas educativas gratuitas creadas por un padre para padres. Guías de estudio, exámenes, lecturas y ejercicios de escritura para niños. Menos pantallas, más aprendizaje real."
         path="/"
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'WebSite',
-          name: 'Un Papá Sin Manual',
-          url: 'https://unpapasinmanual.com',
+          name: 'Solo un Papá REAL',
+          url: 'https://solounpapareal.com',
           description: 'Herramientas educativas gratuitas creadas por un padre para padres.',
           inLanguage: 'es',
           publisher: {
             '@type': 'Organization',
-            name: 'Un Papá Sin Manual',
-            url: 'https://unpapasinmanual.com',
+            name: 'Solo un Papá REAL',
+            url: 'https://solounpapareal.com',
           },
         }}
       />
@@ -99,7 +103,7 @@ export default function Landing() {
                 100% Gratuito — Hecho con amor de papá
               </span>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
-                Un Papá <span className="text-yellow-300">Sin Manual</span>
+                Solo un Papá <span className="text-yellow-300">REAL</span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-sky-100 max-w-2xl mx-auto lg:mx-0 mb-8 sm:mb-10 leading-relaxed">
                 Herramientas educativas creadas por un padre para padres. Porque la mejor inversión
@@ -132,7 +136,7 @@ export default function Landing() {
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-sky-400/30 to-yellow-300/30 rounded-3xl blur-2xl transform rotate-3" />
               <img
-                src="/images/landing/unpapasinmanual.jpg"
+                src="/images/landing/solounpapareal.jpg"
                 alt="Padre e hijo leyendo un libro, disfrutando tiempo juntos sin pantallas"
                 className="relative rounded-3xl shadow-2xl border-4 border-white/20 object-cover w-full h-[500px]"
               />
@@ -184,6 +188,116 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ══════ LIBRO DE LA SEMANA ══════ */}
+      <section className="py-14 sm:py-20 md:py-24 bg-gradient-to-br from-rose-50 via-white to-amber-50 relative overflow-hidden">
+        {/* Decorative blobs */}
+        <div className="absolute top-0 left-0 w-72 h-72 bg-rose-200/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-200/30 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
+
+        <div className="max-w-6xl mx-auto px-4 relative">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+
+            {/* Illustration side */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative"
+            >
+              <div className="relative bg-white rounded-3xl shadow-2xl border border-rose-100 p-5 sm:p-7">
+                {/* Book cover image */}
+                <div className="aspect-[3/4] rounded-2xl overflow-hidden relative shadow-inner">
+                  <img
+                    src="/images/landing/dinosaurio_libro.png"
+                    alt="Portada del libro El Dinosaurio que Viajó a las Estrellas"
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Decorative spine */}
+                  <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/40 to-transparent shadow-[inset_-1px_0_2px_rgba(0,0,0,0.2)] mix-blend-overlay" />
+                  {/* Lighting effect */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-black/30 pointer-events-none mix-blend-overlay" />
+                </div>
+
+                {/* Mini chapter previews */}
+                <div className="flex gap-2 mt-4 overflow-hidden">
+                  {[1,2,3,4,5,6,7].map(d => (
+                    <div key={d} className="flex-1 min-w-0 bg-rose-50 rounded-lg p-2 text-center border border-rose-100">
+                      <div className="text-xs font-bold text-rose-400">Día {d}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Floating badge */}
+              <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-amber-400 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-lg shadow-amber-300/50 rotate-6">
+                <Sparkles className="w-3.5 h-3.5 inline mr-1" />
+                Nuevo
+              </div>
+            </motion.div>
+
+            {/* Text side */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="text-center lg:text-left"
+            >
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-100 text-rose-600 rounded-full text-xs sm:text-sm font-bold mb-4 sm:mb-5">
+                <BookHeart className="w-4 h-4" />
+                Herramienta Destacada
+              </span>
+
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-800 mb-4 sm:mb-5 leading-tight">
+                Crea el <span className="text-rose-500">Libro de la Semana</span> de tu hijo
+              </h2>
+
+              <p className="text-slate-500 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
+                Un libro ilustrado de 7 capítulos, personalizado con los intereses de tu hijo.
+                Diseñado para leerse <strong className="text-slate-700">un capítulo por día, 20 minutos de lectura</strong>,
+                y construir el hábito que cambia todo.
+              </p>
+
+              {/* Features */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 text-left">
+                {[
+                  { icon: <Sparkles className="w-5 h-5 text-amber-500" />, title: 'Personalizado con IA', desc: 'Basado en lo que a tu hijo le apasiona: dinosaurios, espacio, princesas, robots...' },
+                  { icon: <BookOpen className="w-5 h-5 text-rose-500" />, title: '7 capítulos ilustrados', desc: 'Cada capítulo incluye una ilustración única generada especialmente para la historia.' },
+                  { icon: <Clock className="w-5 h-5 text-sky-500" />, title: '20 min por día', desc: 'La cantidad perfecta para crear el hábito de lectura sin agotar su atención.' },
+                  { icon: <Download className="w-5 h-5 text-emerald-500" />, title: 'Descarga en PDF', desc: 'Imprime el libro completo con portada, ilustraciones y todos los capítulos.' },
+                ].map((feat, i) => (
+                  <div key={i} className="flex gap-3 p-3 rounded-xl bg-white/80 border border-slate-100">
+                    <div className="mt-0.5 flex-shrink-0">{feat.icon}</div>
+                    <div>
+                      <p className="font-bold text-slate-700 text-sm">{feat.title}</p>
+                      <p className="text-slate-400 text-xs leading-relaxed">{feat.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Stat highlight */}
+              <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  <strong className="text-rose-600">Los niños que leen 20 minutos al día</strong> están expuestos a
+                  <strong className="text-slate-800"> 1.8 millones de palabras al año</strong> y superan al 90% de sus compañeros en pruebas estandarizadas.
+                </p>
+              </div>
+
+              <Link
+                to="/herramientas?tool=book"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white rounded-2xl font-bold text-base sm:text-lg shadow-lg shadow-rose-300/40 hover:shadow-xl transition-all active:scale-95"
+              >
+                <BookHeart className="w-5 h-5" />
+                Crear un Libro Ahora
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* ══════ HERRAMIENTAS ══════ */}
       <section className="py-12 sm:py-16 md:py-20">
         <div className="max-w-5xl mx-auto px-4">
@@ -204,7 +318,7 @@ export default function Landing() {
                 className="h-full"
               >
                 <Link
-                  to="/herramientas"
+                  to={`/herramientas?tool=${tool.toolKey}`}
                   className={`block rounded-2xl p-6 sm:p-7 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group active:scale-[0.98] relative overflow-hidden h-full flex flex-col ${tool.cardClasses}`}
                 >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl -mr-8 -mt-8" />
@@ -340,7 +454,7 @@ export default function Landing() {
                   Menos consumo pasivo, más aprendizaje activo.</strong>
                 </p>
                 <p className="text-slate-500 text-sm font-medium mt-8 flex items-center gap-2">
-                  <Heart className="w-4 h-4 text-sky-400 fill-sky-400" /> Un Papá Sin Manual
+                  <Heart className="w-4 h-4 text-sky-400 fill-sky-400" /> Solo un Papá REAL
                 </p>
               </div>
 
@@ -367,15 +481,31 @@ export default function Landing() {
       {/* ══════ FOOTER ══════ */}
       <footer className="bg-slate-800 text-slate-400 py-8 sm:py-10">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <p className="font-bold text-white mb-2 text-sm sm:text-base">Un Papá Sin Manual</p>
+          <p className="font-bold text-white mb-2 text-sm sm:text-base">Solo un Papá REAL</p>
           <p className="text-xs sm:text-sm mb-4">Herramientas educativas gratuitas hechas con amor de papá.</p>
           <div className="flex justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
             <Link to="/herramientas" className="hover:text-white transition-colors">Herramientas</Link>
             <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
             <button id="btn-donar-footer" onClick={() => setDonationOpen(true)} className="hover:text-white transition-colors">Donar</button>
           </div>
+          <div className="flex justify-center gap-6 mt-8 mb-2">
+            <a href="#" className="text-slate-400 hover:text-rose-400 transition-colors">
+              <span className="sr-only">Instagram</span>
+              <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
+            </a>
+            <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              <span className="sr-only">TikTok</span>
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5v3a3 3 0 0 1-3-3v10a7 7 0 1 1-7-7v3a4 4 0 0 0 4 4" />
+              </svg>
+            </a>
+            <a href="#" className="text-slate-400 hover:text-red-500 transition-colors">
+              <span className="sr-only">YouTube</span>
+              <Youtube className="w-5 h-5 sm:w-6 sm:h-6" />
+            </a>
+          </div>
           <p className="text-xs mt-6 text-slate-500">
-            © {new Date().getFullYear()} Un Papá Sin Manual. Todos los derechos reservados.
+            © {new Date().getFullYear()} Solo un Papá REAL. Todos los derechos reservados.
           </p>
         </div>
       </footer>

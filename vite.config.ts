@@ -14,7 +14,7 @@ export default defineConfig(({mode}) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'icon.svg'],
         manifest: {
-          name: 'Un Papá Sin Manual',
+          name: 'Solo un Papá REAL',
           short_name: 'Papá Sin Manual',
           description: 'Herramientas educativas gratuitas para padres. Guías de estudio, exámenes, lecturas y ejercicios de escritura para niños.',
           theme_color: '#0ea5e9',
